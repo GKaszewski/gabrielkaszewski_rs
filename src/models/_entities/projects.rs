@@ -4,18 +4,20 @@ use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize)]
-#[sea_orm(table_name = "jobs")]
+#[sea_orm(table_name = "projects")]
 pub struct Model {
     pub created_at: DateTimeWithTimeZone,
     pub updated_at: DateTimeWithTimeZone,
     #[sea_orm(primary_key)]
     pub id: i32,
-    pub position: String,
-    pub company: String,
-    pub start_date: Date,
-    pub end_date: Option<Date>,
-    pub technologies: String,
-    pub still_working: bool,
+    pub name: String,
+    pub technology: String,
+    pub short_description: String,
+    pub description: Option<String>,
+    pub category: String,
+    pub github_url: Option<String>,
+    pub download_url: Option<String>,
+    pub visit_url: Option<String>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

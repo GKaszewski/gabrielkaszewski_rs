@@ -1,7 +1,7 @@
 use loco_rs::prelude::*;
 
 use crate::models::{
-    _entities::jobs::{ActiveModel, Entity, Model},
+    _entities::jobs::{Entity, Model},
     jobs::{get_technologies_from_string, JobWithTechnologies},
 };
 

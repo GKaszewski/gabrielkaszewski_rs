@@ -2,6 +2,8 @@
 
 pub mod prelude;
 
+pub mod data;
 pub mod jobs;
+pub mod projects;
 pub mod skills;
 pub mod users;
