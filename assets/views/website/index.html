@@ -1,0 +1,53 @@
+{% extends "website/base.html" %} {% block content %}
+<div class="w-full mt-8"></div>
+<h3 class="mt-4 mb-2 text-5xl font-bold tracking-tight">Who am I? 🤔</h3>
+<section
+  class="flex flex-col items-center m-4 prose text-justify text-white md:text-left md:m-0 md:w-1/2 md:prose-lg lg:prose-xl"
+>
+  Hi, my name is Gabriel Kaszewski, and I am a Bioinformatics student 🧬 and
+  self-taught full-stack developer 💻. I started coding when I was 11 🚀. I love
+  solving problems and writing software 👨‍💻. Currently, I am working as a Python
+  Developer at digimonkeys.com 🐒. I am very passionate about Computer Science
+  💾.
+</section>
+<h3 class="mt-4 mb-2 text-5xl font-bold tracking-tight">Skills 🛠️</h3>
+{% for skill in skills %}
+<p
+  class="text-base text-center rounded-2xl font-semibold tracking-tight text-black shadow-lg bg-yellow-400 p-2 min-w-[4rem] max-w-[12rem]"
+>
+  {{ skill.name }}
+</p>
+{%endfor%}
+<section class="flex flex-wrap justify-center w-1/2 gap-4"></section>
+<h3 class="mt-4 mb-2 text-5xl font-bold tracking-tight">Experience 📈</h3>
+{% for job in jobs %}
+<div class="bg-gray-100 rounded-lg p-4 text-black flex flex-col gap-2">
+  <h4 class="text-2xl">
+    <span class="fas fa-user-circle"></span> {{ job.position }}
+  </h4>
+  <h5 class="text-xl font-light">
+    <span class="fas fa-building"></span> {{ job.company }}
+  </h5>
+  {% if job.still_working %}
+  <h6>
+    <span class="fas fa-clock"></span> {{ job.start_date |
+    date(format="%d-%m-%Y") }} - Present
+  </h6>
+  {% else %}
+  <h6>
+    <span class="fas fa-clock"></span> {{ job.start_date |
+    date(format="%d-%m-%Y") }} - {{ job.end_date | date(format="%d-%m-%Y") }}
+  </h6>
+  {% endif %}
+  <p class="font-bold"><span class="fas fa-microchip"></span> Technologies</p>
+  {% for technology in job.technologies %}
+  <p
+    class="text-base text-center rounded-2xl font-semibold tracking-tight text-black shadow-lg bg-yellow-400 p-2 min-w-[4rem] max-w-[12rem]"
+  >
+    {{ technology }}
+  </p>
+  {% endfor %}
+</div>
+{%endfor%}
+<section class="flex flex-col flex-wrap justify-center gap-4 m-4"></section>
+{% endblock content %}
