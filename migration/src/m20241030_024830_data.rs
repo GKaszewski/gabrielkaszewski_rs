@@ -13,6 +13,7 @@ impl MigrationTrait for Migration {
                     .col(pk_auto(Data::Id))
                     .col(string(Data::FileUrl))
                     .col(boolean(Data::Protected))
+                    .col(string(Data::FileName))
                     .to_owned(),
             )
             .await
@@ -31,7 +32,5 @@ enum Data {
     Id,
     FileUrl,
     Protected,
-    
+    FileName,
 }
-
-

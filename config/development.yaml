@@ -40,6 +40,10 @@ server:
     # ====================================
     #
     # for use with the view_engine in initializers/view_engine.rs
+    limit_payload:
+      enable: true
+      body_limit: 1gb
+
     static:
       enable: true
       must_exist: true

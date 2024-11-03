@@ -1,0 +1,12 @@
+{% extends "website/base.html" %} {% block content %}
+<script src="/static/js/data-upload.js" defer></script>
+<div class="w-full mt-16"></div>
+<form id="data-upload" class="text-black">
+  <label class="text-white" for="file">Upload a file:</label>
+  <input id="file-input" type="file" id="file" name="file" required />
+  <label class="text-white" for="protected">Protected:</label>
+  <input id="protected-input" type="checkbox" id="protected" name="protected" />
+  <button class="text-white" type="submit">Upload</button>
+</form>
+
+{% endblock content%}

@@ -1,3 +1,4 @@
+use loco_rs::prelude::*;
 use serde::{Deserialize, Serialize};
 
 use crate::models::_entities::users;
@@ -38,4 +39,8 @@ impl CurrentResponse {
             email: user.email.clone(),
         }
     }
+}
+
+pub async fn login(v: impl ViewRenderer) -> Result<impl IntoResponse> {
+    format::render().view(&v, "website/login.html", data!({}))
 }

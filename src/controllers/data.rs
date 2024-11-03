@@ -11,10 +11,11 @@ use axum_range::Ranged;
 use axum_extra::headers::Range;
 use axum_extra::TypedHeader;
 
+use crate::models::users;
 use crate::services;
 
 pub async fn get_data(
-    auth: auth::JWT,
+    auth: Option<auth::JWT>,
     range: Option<TypedHeader<Range>>,
     Path(file_name): Path<String>,
     State(ctx): State<AppContext>,
@@ -27,13 +28,18 @@ pub async fn upload_data(
     State(ctx): State<AppContext>,
     payload: Multipart,
 ) -> Result<Response> {
+    match users::Model::find_by_pid(&ctx.db, &auth.claims.pid).await {
+        Ok(_) => {}
+        Err(_) => return unauthorized("Unauthorized"),
+    }
+
     services::data::add(&auth, &ctx, payload).await?;
     format::html("<h1>File uploaded successfully</h1>")
 }
 
 pub fn routes() -> Routes {
     Routes::new()
-        .prefix("api/data/")
+        .prefix("api/data")
         .add("/upload", post(upload_data))
         .add("/:file_name", get(get_data))
 }

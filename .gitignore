@@ -17,3 +17,6 @@ target/
 *.pdb
 
 *.sqlite
+
+uploads/
+assets/static/css/main.css

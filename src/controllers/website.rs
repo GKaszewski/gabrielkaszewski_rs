@@ -3,6 +3,7 @@
 #![allow(clippy::unused_async)]
 use loco_rs::prelude::*;
 
+use crate::models::users;
 use crate::views;
 
 pub async fn render_index(
@@ -13,11 +14,22 @@ pub async fn render_index(
 }
 
 pub async fn render_login(ViewEngine(v): ViewEngine<TeraView>) -> impl IntoResponse {
-    views::website::login(v).await
+    views::auth::login(v).await
+}
+
+pub async fn render_upload(
+    auth: auth::JWT,
+    ViewEngine(v): ViewEngine<TeraView>,
+    State(ctx): State<AppContext>,
+) -> Result<impl IntoResponse> {
+    let _current_user = users::Model::find_by_pid(&ctx.db, &auth.claims.pid).await?;
+
+    views::data::upload(v).await
 }
 
 pub fn routes() -> Routes {
     Routes::new()
         .add("/", get(render_index))
+        .add("/upload", get(render_upload))
         .add("/login", get(render_login))
 }
