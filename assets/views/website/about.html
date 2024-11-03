@@ -1,0 +1,117 @@
+{% extends "website/base.html" %} {% block content %}
+<span class="m-8">🌟</span>
+<div
+  class="flex flex-col items-center justify-center gap-2 p-4 bg-white rounded-lg"
+>
+  <img
+    src="/static/images/ja.jpg"
+    alt="me"
+    width="300"
+    height="300"
+    class="object-cover rounded-md"
+  />
+  <h2 class="mt-4 text-2xl font-bold text-black">Hello, I'm Gabriel! 👋</h2>
+</div>
+<h1 class="mt-6 text-3xl font-extrabold">More info about me! 💡</h1>
+<div
+  class="flex flex-col items-center m-4 prose text-justify text-white md:text-left md:m-0 md:w-1/2 md:prose-lg lg:prose-xl"
+>
+  <p>
+    Hi! I am Gabriel and I am {{ age }} years old. I study Bioinformatics at the
+    University of Gdansk 🏫. I'm fluent in Polish and English and currently work
+    as a Python Developer at digimonkeys.com 🐒💻.
+  </p>
+</div>
+<h1 class="mt-6 text-3xl font-extrabold">Hobbies 🎮🎸</h1>
+<div
+  class="flex flex-wrap items-center justify-center gap-4 m-4 md:m-0 md:w-1/2"
+>
+  <p
+    class="text-base text-center rounded-2xl font-semibold tracking-tight text-black shadow-lg bg-yellow-400 p-2 min-w-[4rem] max-w-[12rem]"
+  >
+    Programming 💻
+  </p>
+  <p
+    class="text-base text-center rounded-2xl font-semibold tracking-tight text-black shadow-lg bg-yellow-400 p-2 min-w-[4rem] max-w-[12rem]"
+  >
+    Filmmaking 🎥
+  </p>
+  <p
+    class="text-base text-center rounded-2xl font-semibold tracking-tight text-black shadow-lg bg-yellow-400 p-2 min-w-[4rem] max-w-[12rem]"
+  >
+    Gaming 🕹️
+  </p>
+  <p
+    class="text-base text-center rounded-2xl font-semibold tracking-tight text-black shadow-lg bg-yellow-400 p-2 min-w-[4rem] max-w-[12rem]"
+  >
+    Playing guitar 🎸
+  </p>
+</div>
+<h1 class="mt-6 text-3xl font-bold">Interests 🌌📚</h1>
+<div
+  class="flex flex-wrap items-center justify-center gap-4 m-4 md:m-0 md:w-1/2"
+>
+  <p
+    class="text-base text-center rounded-2xl font-semibold tracking-tight text-black shadow-lg bg-yellow-400 p-2 min-w-[4rem] max-w-[12rem]"
+  >
+    Computer Science 💾
+  </p>
+  <p
+    class="text-base text-center rounded-2xl font-semibold tracking-tight text-black shadow-lg bg-yellow-400 p-2 min-w-[4rem] max-w-[12rem]"
+  >
+    Sci-Fi Books 📚
+  </p>
+  <p
+    class="text-base text-center rounded-2xl font-semibold tracking-tight text-black shadow-lg bg-yellow-400 p-2 min-w-[4rem] max-w-[12rem]"
+  >
+    Astronomy 🔭
+  </p>
+  <p
+    class="text-base text-center rounded-2xl font-semibold tracking-tight text-black shadow-lg bg-yellow-400 p-2 min-w-[4rem] max-w-[12rem]"
+  >
+    Sports 🏅
+  </p>
+  <p
+    class="text-base text-center rounded-2xl font-semibold tracking-tight text-black shadow-lg bg-yellow-400 p-2 min-w-[4rem] max-w-[12rem]"
+  >
+    History 🏰
+  </p>
+</div>
+<h1 class="mt-6 text-3xl font-bold">FAQ ❓</h1>
+<div class="flex flex-col gap-2 m-4">
+  <div>
+    <h6 class="text-xl font-bold">
+      How old were you when you started programming?
+    </h6>
+    <p>I was 11 years old 🧑‍💻.</p>
+  </div>
+  <div>
+    <h6 class="text-xl font-bold">How did you learn programming?</h6>
+    <p>I read books 📖 and practiced a lot.</p>
+  </div>
+  <div>
+    <h6 class="text-xl font-bold">Are you studying Computer Science?</h6>
+    <p>No, I study Bioinformatics, but it's closely related 🧬💻.</p>
+  </div>
+  <div>
+    <h6 class="text-xl font-bold">
+      Which programming language do you recommend for a beginner?
+    </h6>
+    <p>
+      The language doesn't really matter, just choose one you like and dive in
+      🌊.
+    </p>
+  </div>
+  <div>
+    <h6 class="text-xl font-bold">What was your first programming language?</h6>
+    <p>My journey began with C++ 🖥️.</p>
+  </div>
+  <div>
+    <h6 class="text-xl font-bold">
+      What is your favorite programming language?
+    </h6>
+    <p>I enjoy writing in C, Rust, and Python 🐍. But Rust is the best 💖🦀</p>
+  </div>
+</div>
+<span></span>
+{% endblock content %}

@@ -27,9 +27,14 @@ pub async fn render_upload(
     views::data::upload(v).await
 }
 
+pub async fn render_about(ViewEngine(v): ViewEngine<TeraView>) -> Result<impl IntoResponse> {
+    views::website::about(v).await
+}
+
 pub fn routes() -> Routes {
     Routes::new()
         .add("/", get(render_index))
         .add("/upload", get(render_upload))
         .add("/login", get(render_login))
+        .add("/about", get(render_about))
 }
