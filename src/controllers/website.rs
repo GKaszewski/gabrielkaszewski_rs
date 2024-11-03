@@ -12,6 +12,12 @@ pub async fn render_index(
     views::website::index(v, &ctx).await
 }
 
+pub async fn render_login(ViewEngine(v): ViewEngine<TeraView>) -> impl IntoResponse {
+    views::website::login(v).await
+}
+
 pub fn routes() -> Routes {
-    Routes::new().add("/", get(render_index))
+    Routes::new()
+        .add("/", get(render_index))
+        .add("/login", get(render_login))
 }

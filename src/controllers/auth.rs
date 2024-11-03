@@ -1,14 +1,16 @@
 use axum::debug_handler;
+use axum::http::header;
+use axum::http::HeaderValue;
+use axum::response::Redirect;
+use cookie::Cookie;
+use cookie::CookieJar;
 use loco_rs::prelude::*;
 use serde::{Deserialize, Serialize};
 
 use crate::{
     mailers::auth::AuthMailer,
-    models::{
-        _entities::users,
-        users::{LoginParams, RegisterParams},
-    },
-    views::auth::{CurrentResponse, LoginResponse},
+    models::{_entities::users, users::LoginParams},
+    views::auth::CurrentResponse,
 };
 #[derive(Debug, Deserialize, Serialize)]
 pub struct VerifyParams {
@@ -24,37 +26,6 @@ pub struct ForgotParams {
 pub struct ResetParams {
     pub token: String,
     pub password: String,
-}
-
-/// Register function creates a new user with the given parameters and sends a
-/// welcome email to the user
-#[debug_handler]
-async fn register(
-    State(ctx): State<AppContext>,
-    Json(params): Json<RegisterParams>,
-) -> Result<Response> {
-    let res = users::Model::create_with_password(&ctx.db, &params).await;
-
-    let user = match res {
-        Ok(user) => user,
-        Err(err) => {
-            tracing::info!(
-                message = err.to_string(),
-                user_email = &params.email,
-                "could not register user",
-            );
-            return format::json(());
-        }
-    };
-
-    let user = user
-        .into_active_model()
-        .set_email_verification_sent(&ctx.db)
-        .await?;
-
-    AuthMailer::send_welcome(&ctx, &user).await?;
-
-    format::json(())
 }
 
 /// Verify register user. if the user not verified his email, he can't login to
@@ -121,7 +92,11 @@ async fn reset(State(ctx): State<AppContext>, Json(params): Json<ResetParams>) -
 
 /// Creates a user login and returns a token
 #[debug_handler]
-async fn login(State(ctx): State<AppContext>, Json(params): Json<LoginParams>) -> Result<Response> {
+async fn login(
+    State(ctx): State<AppContext>,
+    jar: CookieJar,
+    Form(params): Form<LoginParams>,
+) -> Result<Response> {
     let user = users::Model::find_by_email(&ctx.db, &params.email).await?;
 
     let valid = user.verify_password(&params.password);
@@ -136,7 +111,32 @@ async fn login(State(ctx): State<AppContext>, Json(params): Json<LoginParams>) -
         .generate_jwt(&jwt_secret.secret, &jwt_secret.expiration)
         .or_else(|_| unauthorized("unauthorized!"))?;
 
-    format::json(LoginResponse::new(&user, &token))
+    let cookie = Cookie::build(("token", token.clone()))
+        .path("/")
+        .http_only(true)
+        .secure(true)
+        .same_site(cookie::SameSite::Lax);
+    let cookie = jar.add(cookie);
+
+    let cookie = cookie.get("token").map(|c| c.value().to_owned());
+
+    let mut response = Redirect::to("/").into_response();
+    match cookie {
+        Some(token) => {
+            let cookie = format!("token={}; Path=/; HttpOnly; Secure; SameSite=Lax", token);
+            let authorization_header = format!("Bearer {}", token);
+            response
+                .headers_mut()
+                .append(header::SET_COOKIE, HeaderValue::from_str(&cookie).unwrap());
+            response.headers_mut().append(
+                header::AUTHORIZATION,
+                HeaderValue::from_str(&authorization_header).unwrap(),
+            );
+        }
+        None => {}
+    }
+
+    Ok(response)
 }
 
 #[debug_handler]
@@ -145,13 +145,24 @@ async fn current(auth: auth::JWT, State(ctx): State<AppContext>) -> Result<Respo
     format::json(CurrentResponse::new(&user))
 }
 
+async fn logout() -> impl IntoResponse {
+    let cookie = "token=''; Path=/; HttpOnly; Secure; SameSite=Lax";
+    let mut response = Redirect::to("/").into_response();
+
+    response
+        .headers_mut()
+        .append(header::SET_COOKIE, HeaderValue::from_str(&cookie).unwrap());
+
+    response
+}
+
 pub fn routes() -> Routes {
     Routes::new()
         .prefix("/api/auth")
-        .add("/register", post(register))
         .add("/verify", post(verify))
         .add("/login", post(login))
         .add("/forgot", post(forgot))
         .add("/reset", post(reset))
         .add("/current", get(current))
+        .add("/logout", get(logout))
 }

@@ -20,6 +20,8 @@ migration = { path = "migration" }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 tokio = { version = "1.33.0", default-features = false }
+tower = { version = "0.5.1", features = ["util"] }
+tower-http = { version = "0.6.1", features = ["fs", "trace"] }
 async-trait = "0.1.74"
 tracing = "0.1.40"
 chrono = "0.4"
@@ -31,7 +33,7 @@ sea-orm = { version = "1.1.0", features = [
   "macros",
 ] }
 
-axum = "0.7.5"
+axum = { version = "0.7.5", features = ["multipart"] }
 include_dir = "0.7"
 uuid = { version = "1.6.0", features = ["v4"] }
 tracing-subscriber = { version = "0.3.17", features = ["env-filter", "json"] }
@@ -39,6 +41,8 @@ tracing-subscriber = { version = "0.3.17", features = ["env-filter", "json"] }
 # view engine i18n
 fluent-templates = { version = "0.8.0", features = ["tera"] }
 unic-langid = "0.9.4"
+axum-range = "0.4.0"
+axum-extra = { version = "0.9.4", features = ["multipart", "typed-header", "cookie"] }
 # /view engine
 
 [[bin]]

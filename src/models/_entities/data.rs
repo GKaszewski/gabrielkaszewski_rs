@@ -12,6 +12,7 @@ pub struct Model {
     pub id: i32,
     pub file_url: String,
     pub protected: bool,
+    pub file_name: String,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

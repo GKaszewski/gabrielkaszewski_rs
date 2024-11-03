@@ -8,6 +8,7 @@ use loco_rs::{
     controller::AppRoutes,
     db::{self, truncate_table},
     environment::Environment,
+    storage::{self, Storage},
     task::Tasks,
     Result,
 };
@@ -47,6 +48,7 @@ impl Hooks for App {
 
     fn routes(_ctx: &AppContext) -> AppRoutes {
         AppRoutes::with_default_routes() // controller routes below
+            .add_route(controllers::data::routes())
             .add_route(controllers::auth::routes())
             .add_route(controllers::website::routes())
     }
@@ -56,8 +58,18 @@ impl Hooks for App {
         Ok(())
     }
 
+    async fn after_context(ctx: AppContext) -> Result<AppContext> {
+        let store = storage::drivers::local::new_with_prefix("uploads").map_err(Box::from)?;
+
+        Ok(AppContext {
+            storage: Storage::single(store).into(),
+            ..ctx
+        })
+    }
+
     fn register_tasks(tasks: &mut Tasks) {
         tasks.register(tasks::seed::SeedData);
+        tasks.register(tasks::create_user::CreateUserData);
     }
 
     async fn truncate(db: &DatabaseConnection) -> Result<()> {
