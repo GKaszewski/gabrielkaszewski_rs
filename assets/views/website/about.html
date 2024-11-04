@@ -1,6 +1,5 @@
 {% import "website/macros/chip.html" as chip %} {% extends "website/base.html"
 %} {% block content %}
-<span class="m-8">🌟</span>
 <div
   class="flex flex-col items-center justify-center gap-2 p-4 bg-white rounded-lg"
 >
@@ -34,11 +33,9 @@
 <div
   class="flex flex-wrap items-center justify-center gap-4 m-4 md:m-0 md:w-1/2"
 >
-  {{ chip::chip(text="Computer Science 💾")}}
-  {{ chip::chip(text="Sci-Fi Books📚")}}
-  {{ chip::chip(text="Astronomy 🔭")}}
-  {{ chip::chip(text="Sports 🏅") }}
-  {{ chip::chip(text="History 🏰")}}
+  {{ chip::chip(text="Computer Science 💾")}} {{ chip::chip(text="Sci-Fi
+  Books📚")}} {{ chip::chip(text="Astronomy 🔭")}} {{ chip::chip(text="Sports
+  🏅") }} {{ chip::chip(text="History 🏰")}}
 </div>
 <h1 class="mt-6 text-3xl font-bold">FAQ ❓</h1>
 <div class="flex flex-col gap-2 m-4">

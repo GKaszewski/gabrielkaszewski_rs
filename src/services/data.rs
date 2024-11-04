@@ -5,8 +5,12 @@ use crate::models::users::users;
 use axum::extract::Multipart;
 use axum_extra::headers::Range;
 use axum_extra::TypedHeader;
+
+use bytes::Bytes;
 use loco_rs::prelude::*;
 use tokio::fs::File;
+
+use std::fs::{self};
 
 use axum_range::KnownSize;
 use axum_range::Ranged;
@@ -51,7 +55,49 @@ pub async fn serve_data_file(
     }
 }
 
-pub async fn add(auth: &auth::JWT, ctx: &AppContext, mut payload: Multipart) -> ModelResult<Model> {
+pub async fn add_data_file_from_path(
+    ctx: &AppContext,
+    file_path: &str,
+    file_name: &str,
+    protected: bool,
+    uuid_name: bool,
+) -> ModelResult<Model> {
+    let ext = String::from(file_name.split('.').last().unwrap_or("txt"));
+    let file_name = if uuid_name {
+        let temp_file_name = uuid::Uuid::new_v4().to_string();
+        format!("{}.{}", temp_file_name, ext)
+    } else {
+        file_name.to_string()
+    };
+
+    let path = PathBuf::from(file_path);
+    let content = fs::read(&path).map_err(|_| ModelError::Any("Failed to read file".into()))?;
+    let content = Bytes::from(content);
+
+    let mut item = ActiveModel {
+        ..Default::default()
+    };
+
+    item.protected = Set(protected);
+    item.file_name = Set(file_name.to_string());
+    item.file_url = Set(format!("uploads/{}", file_name));
+
+    let item = item.insert(&ctx.db).await?;
+
+    match ctx.storage.as_ref().upload(&path.as_path(), &content).await {
+        Ok(_) => {}
+        Err(_) => return Err(ModelError::Any("Failed to save file to storage".into())),
+    }
+
+    Ok(item)
+}
+
+pub async fn add(
+    auth: &auth::JWT,
+    ctx: &AppContext,
+    mut payload: Multipart,
+    uuid_name: bool,
+) -> ModelResult<Model> {
     let _current_user = users::Model::find_by_pid(&ctx.db, &auth.claims.pid).await?;
 
     let mut protected = None;
@@ -83,7 +129,13 @@ pub async fn add(auth: &auth::JWT, ctx: &AppContext, mut payload: Multipart) -> 
                     .ok_or_else(|| ModelError::Any("Failed to get file name".into()))?;
                 let ext = String::from(og_file_name.split('.').last().unwrap_or("txt"));
 
-                let temp_file_name = uuid::Uuid::new_v4().to_string();
+                let temp_file_name = if uuid_name {
+                    let temp_file_name = uuid::Uuid::new_v4().to_string();
+                    format!("{}.{}", temp_file_name, ext)
+                } else {
+                    og_file_name.to_string()
+                };
+
                 let temp_file_name = format!("{}.{}", temp_file_name, ext);
 
                 file_name = Some(temp_file_name.clone());

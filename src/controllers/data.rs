@@ -33,7 +33,7 @@ pub async fn upload_data(
         Err(_) => return unauthorized("Unauthorized"),
     }
 
-    services::data::add(&auth, &ctx, payload).await?;
+    services::data::add(&auth, &ctx, payload, true).await?;
     format::html("<h1>File uploaded successfully</h1>")
 }
 

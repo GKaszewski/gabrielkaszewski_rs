@@ -1,3 +1,4 @@
+use core::task;
 use std::path::Path;
 
 use async_trait::async_trait;
@@ -72,6 +73,7 @@ impl Hooks for App {
         tasks.register(tasks::create_user::CreateUserData);
         tasks.register(tasks::create_job::CreateJobData);
         tasks.register(tasks::create_skill::CreateSkillData);
+        tasks.register(tasks::add_data_file::AddDataFile);
     }
 
     async fn truncate(db: &DatabaseConnection) -> Result<()> {
