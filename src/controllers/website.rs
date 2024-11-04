@@ -31,10 +31,19 @@ pub async fn render_about(ViewEngine(v): ViewEngine<TeraView>) -> Result<impl In
     views::website::about(v).await
 }
 
+pub async fn render_projects(
+    ViewEngine(v): ViewEngine<TeraView>,
+    State(ctx): State<AppContext>,
+) -> Result<impl IntoResponse> {
+    views::website::projects(v, &ctx).await
+}
+
 pub fn routes() -> Routes {
     Routes::new()
         .add("/", get(render_index))
         .add("/upload", get(render_upload))
         .add("/login", get(render_login))
+        .add("/projects", get(render_projects))
+        .add("/projets/:project_name", get(render_projects))
         .add("/about", get(render_about))
 }

@@ -13,6 +13,12 @@ pub async fn index(v: impl ViewRenderer, ctx: &AppContext) -> Result<impl IntoRe
     )
 }
 
+pub async fn projects(v: impl ViewRenderer, ctx: &AppContext) -> Result<impl IntoResponse> {
+    // let projects = services::projects::get_all_projects(ctx).await?;
+
+    format::render().view(&v, "website/projects.html", data!({"projects": {}}))
+}
+
 pub async fn about(v: impl ViewRenderer) -> Result<impl IntoResponse> {
     let age = services::website::get_current_age();
 

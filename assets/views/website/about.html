@@ -1,4 +1,5 @@
-{% extends "website/base.html" %} {% block content %}
+{% import "website/macros/chip.html" as chip %} {% extends "website/base.html"
+%} {% block content %}
 <span class="m-8">🌟</span>
 <div
   class="flex flex-col items-center justify-center gap-2 p-4 bg-white rounded-lg"
@@ -26,56 +27,18 @@
 <div
   class="flex flex-wrap items-center justify-center gap-4 m-4 md:m-0 md:w-1/2"
 >
-  <p
-    class="text-base text-center rounded-2xl font-semibold tracking-tight text-black shadow-lg bg-yellow-400 p-2 min-w-[4rem] max-w-[12rem]"
-  >
-    Programming 💻
-  </p>
-  <p
-    class="text-base text-center rounded-2xl font-semibold tracking-tight text-black shadow-lg bg-yellow-400 p-2 min-w-[4rem] max-w-[12rem]"
-  >
-    Filmmaking 🎥
-  </p>
-  <p
-    class="text-base text-center rounded-2xl font-semibold tracking-tight text-black shadow-lg bg-yellow-400 p-2 min-w-[4rem] max-w-[12rem]"
-  >
-    Gaming 🕹️
-  </p>
-  <p
-    class="text-base text-center rounded-2xl font-semibold tracking-tight text-black shadow-lg bg-yellow-400 p-2 min-w-[4rem] max-w-[12rem]"
-  >
-    Playing guitar 🎸
-  </p>
+  {{ chip::chip(text="Programming 💻")}} {{ chip::chip(text="Filmmaking 🎥")}}
+  {{ chip::chip(text="Gaming 🕹️")}} {{ chip::chip(text="Playing guitar 🎸")}}
 </div>
 <h1 class="mt-6 text-3xl font-bold">Interests 🌌📚</h1>
 <div
   class="flex flex-wrap items-center justify-center gap-4 m-4 md:m-0 md:w-1/2"
 >
-  <p
-    class="text-base text-center rounded-2xl font-semibold tracking-tight text-black shadow-lg bg-yellow-400 p-2 min-w-[4rem] max-w-[12rem]"
-  >
-    Computer Science 💾
-  </p>
-  <p
-    class="text-base text-center rounded-2xl font-semibold tracking-tight text-black shadow-lg bg-yellow-400 p-2 min-w-[4rem] max-w-[12rem]"
-  >
-    Sci-Fi Books 📚
-  </p>
-  <p
-    class="text-base text-center rounded-2xl font-semibold tracking-tight text-black shadow-lg bg-yellow-400 p-2 min-w-[4rem] max-w-[12rem]"
-  >
-    Astronomy 🔭
-  </p>
-  <p
-    class="text-base text-center rounded-2xl font-semibold tracking-tight text-black shadow-lg bg-yellow-400 p-2 min-w-[4rem] max-w-[12rem]"
-  >
-    Sports 🏅
-  </p>
-  <p
-    class="text-base text-center rounded-2xl font-semibold tracking-tight text-black shadow-lg bg-yellow-400 p-2 min-w-[4rem] max-w-[12rem]"
-  >
-    History 🏰
-  </p>
+  {{ chip::chip(text="Computer Science 💾")}}
+  {{ chip::chip(text="Sci-Fi Books📚")}}
+  {{ chip::chip(text="Astronomy 🔭")}}
+  {{ chip::chip(text="Sports 🏅") }}
+  {{ chip::chip(text="History 🏰")}}
 </div>
 <h1 class="mt-6 text-3xl font-bold">FAQ ❓</h1>
 <div class="flex flex-col gap-2 m-4">

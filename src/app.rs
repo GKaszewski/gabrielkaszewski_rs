@@ -70,6 +70,8 @@ impl Hooks for App {
     fn register_tasks(tasks: &mut Tasks) {
         tasks.register(tasks::seed::SeedData);
         tasks.register(tasks::create_user::CreateUserData);
+        tasks.register(tasks::create_job::CreateJobData);
+        tasks.register(tasks::create_skill::CreateSkillData);
     }
 
     async fn truncate(db: &DatabaseConnection) -> Result<()> {

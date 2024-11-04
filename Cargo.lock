@@ -1673,6 +1673,7 @@ dependencies = [
  "serde",
  "serde_json",
  "serial_test",
+ "tera",
  "tokio",
  "tower 0.5.1",
  "tower-http",
