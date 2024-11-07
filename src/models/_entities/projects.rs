@@ -21,4 +21,22 @@ pub struct Model {
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
-pub enum Relation {}
+pub enum Relation {
+    #[sea_orm(has_many = "super::project_thumbnails::Entity")]
+    ProjectThumbnails,
+}
+
+impl Related<super::project_thumbnails::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::ProjectThumbnails.def()
+    }
+}
+
+impl Related<super::data::Entity> for Entity {
+    fn to() -> RelationDef {
+        super::project_thumbnails::Relation::Data.def()
+    }
+    fn via() -> Option<RelationDef> {
+        Some(super::project_thumbnails::Relation::Projects.def().rev())
+    }
+}

@@ -2,6 +2,7 @@
 
 pub use super::data::Entity as Data;
 pub use super::jobs::Entity as Jobs;
+pub use super::project_thumbnails::Entity as ProjectThumbnails;
 pub use super::projects::Entity as Projects;
 pub use super::skills::Entity as Skills;
 pub use super::users::Entity as Users;

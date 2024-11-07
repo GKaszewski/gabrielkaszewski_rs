@@ -19,3 +19,12 @@ struct ProjectWithTechnologies {
     pub download_url: Option<String>,
     pub visit_url: Option<String>,
 }
+
+#[derive(Debug)]
+pub enum Category {
+    Web,
+    Mobile,
+    Desktop,
+    Game,
+    Api,
+}

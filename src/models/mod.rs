@@ -4,3 +4,4 @@ pub mod skills;
 pub mod jobs;
 pub mod projects;
 pub mod data;
+pub mod project_thumbnails;
