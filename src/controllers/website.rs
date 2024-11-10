@@ -55,8 +55,15 @@ pub async fn render_project_detail_from_name(
 }
 
 pub async fn render_create_project(
+    auth: auth::JWT,
     ViewEngine(v): ViewEngine<TeraView>,
+    State(ctx): State<AppContext>,
 ) -> Result<impl IntoResponse> {
+    match users::Model::find_by_pid(&ctx.db, &auth.claims.pid).await {
+        Ok(_) => {}
+        Err(_) => return unauthorized("Unauthorized"),
+    }
+
     views::projects::create_project(v).await
 }
 
