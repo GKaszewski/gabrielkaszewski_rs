@@ -7,6 +7,8 @@ use loco_rs::{
 };
 use tracing::info;
 
+use crate::filters;
+
 const I18N_DIR: &str = "assets/i18n";
 const I18N_SHARED: &str = "assets/i18n/shared.ftl";
 
@@ -28,6 +30,9 @@ impl Initializer for ViewEngineInitializer {
             tera_engine
                 .tera
                 .register_function("t", FluentLoader::new(arc));
+            tera_engine
+            .tera
+            .register_filter("markdown", filters::markdown::markdown_filter);
             info!("locales loaded");
         }
 
