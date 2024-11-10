@@ -17,13 +17,13 @@ impl MigratorTrait for Migrator {
     fn migrations() -> Vec<Box<dyn MigrationTrait>> {
         vec![
             // inject-below
+            Box::new(m20220101_000001_users::Migration),
+            Box::new(m20241029_235230_skills::Migration),
+            Box::new(m20241030_002154_jobs::Migration),
+            Box::new(m20241030_024340_projects::Migration),
+            Box::new(m20241030_024830_data::Migration),
             Box::new(m20241110_011041_add_is_highlighted_to_project::Migration),
             Box::new(m20241106_005545_project_thumbnails::Migration),
-            Box::new(m20241030_024830_data::Migration),
-            Box::new(m20241030_024340_projects::Migration),
-            Box::new(m20241030_002154_jobs::Migration),
-            Box::new(m20241029_235230_skills::Migration),
-            Box::new(m20220101_000001_users::Migration),
         ]
     }
 }
