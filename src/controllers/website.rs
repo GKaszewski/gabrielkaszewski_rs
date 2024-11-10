@@ -35,7 +35,7 @@ pub async fn render_projects(
     ViewEngine(v): ViewEngine<TeraView>,
     State(ctx): State<AppContext>,
 ) -> Result<impl IntoResponse> {
-    views::website::projects(v, &ctx).await
+    views::projects::projects(v, &ctx).await
 }
 
 pub async fn render_project_detail(
@@ -43,7 +43,7 @@ pub async fn render_project_detail(
     State(ctx): State<AppContext>,
     Path(id): Path<i32>,
 ) -> Result<impl IntoResponse> {
-    views::website::project_detail(v, &ctx, id).await
+    views::projects::project_detail(v, &ctx, id).await
 }
 
 pub async fn render_project_detail_from_name(
@@ -51,7 +51,13 @@ pub async fn render_project_detail_from_name(
     State(ctx): State<AppContext>,
     Path(name): Path<String>,
 ) -> Result<impl IntoResponse> {
-    views::website::project_detail_from_name(v, &ctx, name).await
+    views::projects::project_detail_from_name(v, &ctx, name).await
+}
+
+pub async fn render_create_project(
+    ViewEngine(v): ViewEngine<TeraView>,
+) -> Result<impl IntoResponse> {
+    views::projects::create_project(v).await
 }
 
 pub async fn render_data(
@@ -73,6 +79,7 @@ pub fn routes() -> Routes {
         .add("/upload", get(render_upload))
         .add("/login", get(render_login))
         .add("/projects", get(render_projects))
+        .add("/projects/create", get(render_create_project))
         .add("/projects/:id", get(render_project_detail))
         .add("/projects/project/:name", get(render_project_detail_from_name))
         .add("/data", get(render_data))

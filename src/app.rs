@@ -1,4 +1,3 @@
-use core::task;
 use std::path::Path;
 
 use async_trait::async_trait;
@@ -49,6 +48,7 @@ impl Hooks for App {
 
     fn routes(_ctx: &AppContext) -> AppRoutes {
         AppRoutes::with_default_routes() // controller routes below
+            .add_route(controllers::project::routes())
             .add_route(controllers::data::routes())
             .add_route(controllers::auth::routes())
             .add_route(controllers::website::routes())
@@ -76,6 +76,7 @@ impl Hooks for App {
         tasks.register(tasks::add_data_file::AddDataFile);
         tasks.register(tasks::delete_data::DeleteData);
         tasks.register(tasks::clear_data::ClearData);
+        tasks.register(tasks::delete_project::DeleteProject);
     }
 
     async fn truncate(db: &DatabaseConnection) -> Result<()> {

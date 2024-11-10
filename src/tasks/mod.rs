@@ -5,3 +5,4 @@ pub mod create_user;
 pub mod seed;
 pub mod clear_data;
 pub mod delete_data;
+pub mod delete_project;

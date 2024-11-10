@@ -1,0 +1,36 @@
+{% extends "website/base.html" %} {% block content %}
+<div class="w-full mt-16"></div>
+<form method="post" id="project-upload" class="flex flex-col gap-2 text-black" action="/api/projects">
+    <label class="text-white" for="name">Project Name:</label>
+    <input type="text" id="name" name="name" required />
+
+    <label class="text-white" for="short-description">Short Description:</label>
+    <input type="text" id="short-description" name="short_description" required />
+
+    <label class="text-white" for="description">Description:</label>
+    <textarea id="description" name="description"></textarea>
+
+    <label class="text-white" for="category">Category</label>
+    <select id="category" name="category" required>
+        <option value="Web">Web</option>
+        <option value="Mobile">Mobile</option>
+        <option value="Desktop">Desktop</option>
+        <option value="Game">Game</option>
+        <option value="Api">Api</option>
+    </select>
+
+    <label class="text-white" for="github">Github Repository:</label>
+    <input type="text" id="github" name="github_url" />
+
+    <label class="text-white" for="website">Website:</label>
+    <input type="text" id="website" name="website_url" />
+
+    <label class="text-white" for="download">Download:</label>
+    <input type="text" id="download" name="download_url" />
+
+    <label class="text-white" for="technology">Technologies:</label>
+    <input type="text" id="technology" name="technologies" required />
+
+    <button type="submit" class="p-2 text-gray-900 bg-yellow-500 rounded-sm shadow hover:bg-yellow-600">Submit</button>
+</form>
+{% endblock content%}

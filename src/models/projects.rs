@@ -42,6 +42,30 @@ pub struct CreateProject {
     pub technologies: Vec<String>,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CreateProjectForm {
+    pub name: String,
+    pub short_description: String,
+    pub description: Option<String>,
+    pub category: String,
+    pub github_url: Option<String>,
+    pub download_url: Option<String>,
+    pub visit_url: Option<String>,
+    pub technologies: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UpdateProject {
+    pub name: Option<String>,
+    pub short_description: Option<String>,
+    pub description: Option<String>,
+    pub category: Option<Category>,
+    pub github_url: Option<String>,
+    pub download_url: Option<String>,
+    pub visit_url: Option<String>,
+    pub technologies: Option<Vec<String>>,
+}
+
 pub fn get_category_from_string(category: &str) -> Category {
     match category {
         "Web" => Category::Web,

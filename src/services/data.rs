@@ -226,3 +226,22 @@ pub async fn delete_multiple_data_by_file_names(
     }
     Ok(())
 }
+
+pub async fn delete_data_by_id(id: i32, ctx: &AppContext) -> ModelResult<()> {
+    let data = Entity::find().filter(data::Column::Id.eq(id)).one(&ctx.db).await?;
+
+    match data {
+        Some(data) => {
+            let path = PathBuf::from(&data.file_url);
+            match ctx.storage.as_ref().delete(&path).await {
+                Ok(_) => {}
+                Err(_) => return Err(ModelError::Any("Failed to delete file from storage".into())),
+            }
+
+            data.delete(&ctx.db).await?;
+        }
+        None => return Err(ModelError::EntityNotFound),
+    }
+    
+    Ok(())
+}
