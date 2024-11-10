@@ -74,6 +74,8 @@ impl Hooks for App {
         tasks.register(tasks::create_job::CreateJobData);
         tasks.register(tasks::create_skill::CreateSkillData);
         tasks.register(tasks::add_data_file::AddDataFile);
+        tasks.register(tasks::delete_data::DeleteData);
+        tasks.register(tasks::clear_data::ClearData);
     }
 
     async fn truncate(db: &DatabaseConnection) -> Result<()> {

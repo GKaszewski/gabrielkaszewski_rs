@@ -15,6 +15,11 @@ use std::fs::{self};
 use axum_range::KnownSize;
 use axum_range::Ranged;
 
+pub async fn get_all_data(ctx: &AppContext) -> ModelResult<Vec<Model>> {
+    let data = Entity::find().all(&ctx.db).await?;
+    Ok(data)
+}
+
 pub async fn get_data_by_file_name(file_name: &str, ctx: &AppContext) -> ModelResult<Model> {
     let data = Entity::find()
         .filter(data::Column::FileName.eq(file_name))
@@ -182,4 +187,42 @@ pub async fn add(
         Err(_) => return Err(ModelError::Any("Failed to save file to storage".into())),
     }
     Ok(item)
+}
+
+pub async fn clear_all_data(ctx: &AppContext) -> ModelResult<()> {
+    let data = get_all_data(&ctx).await?;
+    for item in data {
+        let path = PathBuf::from(&item.file_url);
+        tracing::info!("Deleting file: {:?}", path);
+        match ctx.storage.as_ref().delete(&path).await {
+            Ok(_) => {}
+            Err(_) => return Err(ModelError::Any("Failed to delete file from storage".into())),
+        }
+
+        item.delete(&ctx.db).await?;
+    }
+    Ok(())
+}
+
+pub async fn delete_data_by_file_name(file_name: &str, ctx: &AppContext) -> ModelResult<()> {
+    let data = get_data_by_file_name(&file_name, &ctx).await?;
+
+    let path = PathBuf::from(&data.file_url);
+    match ctx.storage.as_ref().delete(&path).await {
+        Ok(_) => {}
+        Err(_) => return Err(ModelError::Any("Failed to delete file from storage".into())),
+    }
+
+    data.delete(&ctx.db).await?;
+    Ok(())
+}
+
+pub async fn delete_multiple_data_by_file_names(
+    file_names: Vec<String>,
+    ctx: &AppContext,
+) -> ModelResult<()> {
+    for file_name in file_names {
+        delete_data_by_file_name(&file_name, &ctx).await?;
+    }
+    Ok(())
 }

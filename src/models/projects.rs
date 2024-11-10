@@ -30,6 +30,18 @@ pub struct ProjectDto {
     pub thumbnails: Vec<String>,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CreateProject {
+    pub name: String,
+    pub short_description: String,
+    pub description: Option<String>,
+    pub category: Category,
+    pub github_url: Option<String>,
+    pub download_url: Option<String>,
+    pub visit_url: Option<String>,
+    pub technologies: Vec<String>,
+}
+
 pub fn get_category_from_string(category: &str) -> Category {
     match category {
         "Web" => Category::Web,
@@ -43,5 +55,15 @@ pub fn get_category_from_string(category: &str) -> Category {
         "game" => Category::Game,
         "api" => Category::Api,
         _ => Category::Desktop,
+    }
+}
+
+pub fn get_string_from_category(category: &Category) -> String {
+    match category {
+        Category::Web => "Web".to_string(),
+        Category::Mobile => "Mobile".to_string(),
+        Category::Desktop => "Desktop".to_string(),
+        Category::Game => "Game".to_string(),
+        Category::Api => "Api".to_string(),
     }
 }

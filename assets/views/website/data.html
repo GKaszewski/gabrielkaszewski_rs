@@ -1,0 +1,25 @@
+{% extends "website/base.html" %} {% block content %}
+<span class="mt-8"></span>
+<a class="p-2 text-gray-900 bg-yellow-500 rounded-sm shadow hover:bg-yellow-600" href="/upload">Add new file</a>
+<table class="table-fixed">
+    <thead class="flex items-center gap-2 mb-4">
+        <tr>
+            <th>File name</th>
+            <th>Created at</th>
+            <th>Protected</th>
+            <th>Download</th>
+        </tr>
+    </thead>
+    <tbody class="flex flex-col gap-2">
+        {% for file in data %}
+        <tr class="flex items-center gap-2">
+            <td>{{ file.file_name }}</td>
+            <td>{{ file.created_at | date(format="%Y-%m-%d %H:%M") }}</td>
+            <td>{{ file.protected }}</td>
+            <td><a class="p-2 text-gray-900 bg-yellow-500 rounded-sm shadow hover:bg-yellow-600"
+                    href="/api/data/{{ file.file_name }}">Download</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock content%}

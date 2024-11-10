@@ -4,9 +4,9 @@ use crate::{
     models::{
         _entities::{
             project_thumbnails,
-            projects::{self, Entity, Model},
+            projects::{self, ActiveModel, Entity, Model},
         },
-        projects::{get_category_from_string, ProjectDto},
+        projects::{get_category_from_string, get_string_from_category, Category, CreateProject, ProjectDto},
     },
     shared::get_technologies_from_string::get_technologies_from_string,
 };
@@ -138,4 +138,26 @@ pub async fn get_project_dto_by_name(ctx: &AppContext, name: &str) -> Result<Pro
     };
 
     Ok(project_dto)
+}
+
+pub async fn add_project(
+    ctx: &AppContext,
+    data: CreateProject,
+) -> ModelResult<Model> {
+    let mut item = ActiveModel {
+        ..Default::default()
+    };
+
+    item.name = Set(data.name);
+    item.short_description = Set(data.short_description);
+    item.description = Set(data.description);
+    item.category = Set(get_string_from_category(&data.category));
+    item.github_url = Set(data.github_url);
+    item.download_url = Set(data.download_url);
+    item.visit_url = Set(data.visit_url);
+    item.technology = Set(data.technologies.join(","));
+
+    let item = item.insert(&ctx.db).await?;
+
+    Ok(item)
 }
