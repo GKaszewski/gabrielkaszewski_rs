@@ -1,6 +1,15 @@
 use loco_rs::prelude::*;
 
-use crate::{models::{_entities::{project_thumbnails, projects::{self, Entity, Model}}, projects::{get_category_from_string, ProjectDto}}, shared::get_technologies_from_string::get_technologies_from_string};
+use crate::{
+    models::{
+        _entities::{
+            project_thumbnails,
+            projects::{self, Entity, Model},
+        },
+        projects::{get_category_from_string, ProjectDto},
+    },
+    shared::get_technologies_from_string::get_technologies_from_string,
+};
 
 pub async fn get_all_projects(ctx: &AppContext) -> Result<Vec<Model>> {
     let projects = Entity::find().all(&ctx.db).await?;
@@ -9,6 +18,15 @@ pub async fn get_all_projects(ctx: &AppContext) -> Result<Vec<Model>> {
 
 pub async fn get_project_by_id(ctx: &AppContext, id: i32) -> Result<Model> {
     let project = Entity::find_by_id(id).one(&ctx.db).await?;
+    let project = project.ok_or_else(|| ModelError::EntityNotFound)?;
+    Ok(project)
+}
+
+pub async fn get_project_by_name(ctx: &AppContext, name: &str) -> Result<Model> {
+    let project = Entity::find()
+        .filter(projects::Column::Name.contains(name))
+        .one(&ctx.db)
+        .await?;
     let project = project.ok_or_else(|| ModelError::EntityNotFound)?;
     Ok(project)
 }
@@ -64,6 +82,60 @@ pub async fn get_all_projects_dto(ctx: &AppContext) -> Result<Vec<ProjectDto>> {
             }
         })
         .collect();
-    
+
     Ok(projects_dto)
+}
+
+pub async fn get_project_dto(ctx: &AppContext, id: i32) -> Result<ProjectDto> {
+    let project = get_project_by_id(ctx, id).await?;
+    let thumbnails = project
+        .find_related(project_thumbnails::Entity)
+        .all(&ctx.db)
+        .await?;
+
+    let thumbnails = thumbnails
+        .into_iter()
+        .map(|thumbnail| thumbnail.data_id.to_string())
+        .collect();
+    let project_dto = ProjectDto {
+        id: project.id,
+        name: project.name,
+        short_description: project.short_description,
+        description: project.description,
+        category: get_category_from_string(&project.category),
+        github_url: project.github_url,
+        download_url: project.download_url,
+        visit_url: project.visit_url,
+        technologies: get_technologies_from_string(&project.technology),
+        thumbnails,
+    };
+
+    Ok(project_dto)
+}
+
+pub async fn get_project_dto_by_name(ctx: &AppContext, name: &str) -> Result<ProjectDto> {
+    let project = get_project_by_name(ctx, name).await?;
+    let thumbnails = project
+        .find_related(project_thumbnails::Entity)
+        .all(&ctx.db)
+        .await?;
+
+    let thumbnails = thumbnails
+        .into_iter()
+        .map(|thumbnail| thumbnail.data_id.to_string())
+        .collect();
+    let project_dto = ProjectDto {
+        id: project.id,
+        name: project.name,
+        short_description: project.short_description,
+        description: project.description,
+        category: get_category_from_string(&project.category),
+        github_url: project.github_url,
+        download_url: project.download_url,
+        visit_url: project.visit_url,
+        technologies: get_technologies_from_string(&project.technology),
+        thumbnails,
+    };
+
+    Ok(project_dto)
 }

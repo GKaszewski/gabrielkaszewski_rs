@@ -14,7 +14,7 @@
                 {{ chip::chip(text=technology) }}
             {% endfor %}
         </div>
-        <a href="/projects/{{ project.name }}"
+        <a href="/projects/project/{{ project.name }}"
            class="w-full p-2 text-center border border-yellow-400 rounded-xl hover:bg-yellow-400">Read more</a>
         <div class="flex flex-wrap gap-2 sm:justify-center md:justify-start">
             {% if project.githubUrl %}

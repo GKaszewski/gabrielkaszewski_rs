@@ -1,0 +1,58 @@
+{% import "website/macros/chip.html" as chip %}
+{% extends "website/base.html" %} {% block content %}
+<div
+    class="flex flex-col items-center justify-center w-full gap-4 p-4 mt-16 prose text-white lg:prose-lg xl:prose-xl dark:prose-invert">
+    <h1>{{ project.name }}</h1>
+    <span class="mt-8"></span>
+    <section class="mx-auto prose lg:prose-lg xl:prose-xl dark:prose-invert">
+        {{ project.description| markdown | safe }}
+    </section>
+    <span class="mt-8"></span>
+    <section class="flex flex-col items-center justify-center w-full mx-auto">
+        <h1>Technologies</h1>
+        <div class="flex flex-wrap gap-2">
+            {% for technology in project.technologies %}
+            {{ chip::chip(text=technology) }}
+            {% endfor %}
+        </div>
+    </section>
+    <span class="mt-8"></span>
+    {% if project.thumbnails|length > 0 %}
+    <section class="flex flex-col items-center justify-center w-full mx-auto">
+        <h1>Gallery</h1>
+        <div class="flex flex-col gap-4">
+            {% for thumbnail in project.thumbnails %}
+            <img src="{{ thumbnail }}" alt="project thumbnail" class="mx-auto">
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+    <span class="mt-8"></span>
+    <section class="flex flex-col items-center justify-center w-full mx-auto">
+        {% if project.github_url == "" and project.visit_url == "" and project.download_url == "" %}
+        {% else %}
+        <h1>Links</h1>
+        <div class="flex flex-wrap gap-2">
+            {% if project.github_url %}
+            <a href="{{ project.github_url }}" target="_blank"
+                class="w-full p-2 text-center text-white no-underline border border-yellow-400 hover:text-white rounded-xl hover:bg-yellow-400">
+                <span class="fab fa-github"></span> CODE
+            </a>
+            {% endif %}
+            {% if project.visit_url %}
+            <a href="{{ project.visit_url }}" target="_blank"
+                class="w-full p-2 text-center text-white no-underline border border-yellow-400 hover:text-white rounded-xl hover:bg-yellow-400">
+                <span class="fas fa-eye"></span> LIVE
+            </a>
+            {% endif %}
+            {% if project.download_url %}
+            <a href="{{ project.download_url }}" target="_blank"
+                class="w-full p-2 text-center text-white no-underline border border-yellow-400 hover:text-white rounded-xl hover:bg-yellow-400">
+                <span class="fas fa-cloud-download-alt"></span> DOWNLOAD
+            </a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </section>
+</div>
+{% endblock content %}
