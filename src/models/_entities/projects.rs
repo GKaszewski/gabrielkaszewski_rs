@@ -18,6 +18,8 @@ pub struct Model {
     pub github_url: Option<String>,
     pub download_url: Option<String>,
     pub visit_url: Option<String>,
+    pub is_highlighted: bool,
+    pub is_archived: bool,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

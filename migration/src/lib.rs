@@ -9,6 +9,7 @@ mod m20241030_002154_jobs;
 mod m20241030_024340_projects;
 mod m20241030_024830_data;
 mod m20241106_005545_project_thumbnails;
+mod m20241110_011041_add_is_highlighted_to_project;
 pub struct Migrator;
 
 #[async_trait::async_trait]
@@ -16,6 +17,7 @@ impl MigratorTrait for Migrator {
     fn migrations() -> Vec<Box<dyn MigrationTrait>> {
         vec![
             // inject-below
+            Box::new(m20241110_011041_add_is_highlighted_to_project::Migration),
             Box::new(m20241106_005545_project_thumbnails::Migration),
             Box::new(m20241030_024830_data::Migration),
             Box::new(m20241030_024340_projects::Migration),
