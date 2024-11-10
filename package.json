@@ -1,0 +1,14 @@
+{
+  "name": "gabrielkaszewski_rs",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@tailwindcss/typography": "^0.5.15"
+  }
+}

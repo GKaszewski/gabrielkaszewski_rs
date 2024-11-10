@@ -6,6 +6,7 @@
 # will have compiled files and executables
 debug/
 target/
+node_modules/
 
 # include cargo lock
 !Cargo.lock

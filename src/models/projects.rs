@@ -7,24 +7,41 @@ impl ActiveModelBehavior for ActiveModel {
     // extend activemodel below (keep comment for generators)
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
-struct ProjectWithTechnologies {
-    pub id: i32,
-    pub name: String,
-    pub technologies: Vec<String>,
-    pub short_description: String,
-    pub description: Option<String>,
-    pub category: String,
-    pub github_url: Option<String>,
-    pub download_url: Option<String>,
-    pub visit_url: Option<String>,
-}
-
-#[derive(Debug)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Category {
     Web,
     Mobile,
     Desktop,
     Game,
     Api,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ProjectDto {
+    pub id: i32,
+    pub name: String,
+    pub short_description: String,
+    pub description: Option<String>,
+    pub category: Category,
+    pub github_url: Option<String>,
+    pub download_url: Option<String>,
+    pub visit_url: Option<String>,
+    pub technologies: Vec<String>,
+    pub thumbnails: Vec<String>,
+}
+
+pub fn get_category_from_string(category: &str) -> Category {
+    match category {
+        "Web" => Category::Web,
+        "Mobile" => Category::Mobile,
+        "Desktop" => Category::Desktop,
+        "Game" => Category::Game,
+        "Api" => Category::Api,
+        "web" => Category::Web,
+        "mobile" => Category::Mobile,
+        "desktop" => Category::Desktop,
+        "game" => Category::Game,
+        "api" => Category::Api,
+        _ => Category::Desktop,
+    }
 }

@@ -1,0 +1,16 @@
+{% macro image_carousel(id, thumbnails) %}
+<div id="{{ id }}" class="carousel relative shadow-lg w-full max-w-full md:max-w-[50hw] h-[40rem]">
+    <div class="relative w-full h-full overflow-hidden carousel-inner">
+        {% for thumbnail in thumbnails %}
+            <div class="carousel-item absolute inset-0 w-full h-full {% if forloop.first %}{% else %} opacity-0 {% endif %} transition-opacity ease-in-out delay-250 duration-500">
+                <img alt="slide" src="{{ thumbnail }}" class="object-cover w-full h-full">
+            </div>
+        {% endfor %}
+    </div>
+    <div class="absolute bottom-0 z-50 flex justify-center w-full gap-2 py-2">
+        {% for thumbnail in thumbnails %}
+            <button class="carousel-button" data-target="{{ forloop.counter0 }}">•</button>
+        {% endfor %}
+    </div>
+</div>
+{% endmacro image_carousel %}

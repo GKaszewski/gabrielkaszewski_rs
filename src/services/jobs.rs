@@ -1,9 +1,9 @@
 use loco_rs::prelude::*;
 
-use crate::models::{
+use crate::{models::{
     _entities::jobs::{Entity, Model},
-    jobs::{get_technologies_from_string, JobWithTechnologies},
-};
+    jobs::JobWithTechnologies,
+}, shared::get_technologies_from_string::get_technologies_from_string};
 
 pub async fn get_all_jobs(ctx: &AppContext) -> Result<Vec<Model>> {
     let jobs = Entity::find().all(&ctx.db).await?;

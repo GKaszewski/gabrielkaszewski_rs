@@ -14,9 +14,9 @@ pub async fn index(v: impl ViewRenderer, ctx: &AppContext) -> Result<impl IntoRe
 }
 
 pub async fn projects(v: impl ViewRenderer, ctx: &AppContext) -> Result<impl IntoResponse> {
-    // let projects = services::projects::get_all_projects(ctx).await?;
+    let projects = services::projects::get_all_projects_dto(ctx).await?;
 
-    format::render().view(&v, "website/projects.html", data!({"projects": {}}))
+    format::render().view(&v, "website/projects.html", data!({"projects": projects}))
 }
 
 pub async fn about(v: impl ViewRenderer) -> Result<impl IntoResponse> {
