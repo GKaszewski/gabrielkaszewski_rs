@@ -15,12 +15,18 @@
 </div>
 <h1 class="mt-6 text-3xl font-extrabold">More info about me! 💡</h1>
 <div
-  class="flex flex-col items-center m-4 prose text-justify text-white md:text-left md:m-0 md:w-1/2 md:prose-lg lg:prose-xl"
+  class="flex flex-col m-4 prose text-white md:text-left md:m-0 md:w-1/2 md:prose-lg lg:prose-xl prose-blue"
 >
   <p>
     Hi! I am Gabriel and I am {{ age }} years old. I study Bioinformatics at the
     University of Gdansk 🏫. I'm fluent in Polish and English and currently work
     as a Python Developer at digimonkeys.com 🐒💻.
+  </p>
+  <p>
+    I have published one article you can read it
+    <a target="_blank" href="http://dx.doi.org/10.1038/s41598-023-44488-7">
+      here
+    </a>.
   </p>
 </div>
 <h1 class="mt-6 text-3xl font-extrabold">Hobbies 🎮🎸</h1>
@@ -39,7 +45,7 @@
   🏅") }} {{ chip::chip(text="History 🏰")}}
 </div>
 <h1 class="mt-6 text-3xl font-bold">FAQ ❓</h1>
-<div class="flex flex-col gap-2 m-4">
+<div id="faq" class="flex flex-col gap-2 m-4">
   <div>
     <h6 class="text-xl font-bold">
       How old were you when you started programming?
