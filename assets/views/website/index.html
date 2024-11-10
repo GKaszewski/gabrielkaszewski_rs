@@ -87,7 +87,7 @@
 </div>
 <div id="skills" class="flex flex-col items-center justify-center gap-4 p-4 rounded md:w-fit">
   <h3 class="mt-4 mb-2 text-5xl font-bold tracking-tight">Skills 🛠️</h3>
-  <div class="flex flex-wrap items-center gap-1">
+  <div class="flex flex-wrap justify-center w-1/2 gap-4">
     {% for skill in skills %} <div
       class="odd:motion-preset-slide-left even:motion-preset-slide-right odd:motion-delay-100">
       {{ chip::chip(text=skill.name) }}
@@ -99,7 +99,7 @@
   <h3 class="mt-4 mb-2 text-5xl font-bold tracking-tight">Experience 📈</h3>
   {% for job in jobs %}
   <div
-    class="flex flex-col gap-2 p-4 text-black bg-gray-50 rounded-lg max-w-[20rem] shadow-lg odd:motion-preset-slide-right-md odd:motion-delay-100 even:motion-preset-rebound">
+    class="flex flex-col gap-2 p-4 text-black bg-gray-50 rounded-lg w-[20rem] max-w-[20rem] shadow-lg odd:motion-preset-slide-right-md odd:motion-delay-100 even:motion-preset-rebound">
     <h4 class="flex items-center gap-1 text-2xl">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-user-round">
