@@ -3,7 +3,8 @@
   "module": "index.ts",
   "type": "module",
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "tailwindcss-motion": "^0.4.1-beta"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
