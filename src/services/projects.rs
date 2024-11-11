@@ -122,10 +122,30 @@ pub async fn get_project_dto(ctx: &AppContext, id: i32) -> Result<ProjectDto> {
         .all(&ctx.db)
         .await?;
 
+    let thumbnails_ids = thumbnails
+        .iter()
+        .map(|thumbnail| thumbnail.data_id)
+        .collect::<Vec<i32>>();
+
+    let thumbnails_data  = data::Entity::find()
+        .filter(model::query::condition().is_in(data::Column::Id, thumbnails_ids).build())
+        .all(&ctx.db)
+        .await?;
+
+    let thumbnails_map = thumbnails_data
+        .into_iter()
+        .map(|thumbnail| (thumbnail.id, thumbnail))
+        .collect::<std::collections::HashMap<i32, data::Model>>();
+
     let thumbnails = thumbnails
         .into_iter()
-        .map(|thumbnail| thumbnail.data_id.to_string())
+        .map(|thumbnail| {
+            let thumbnail_data = thumbnails_map.get(&thumbnail.data_id).unwrap();
+            let url = format!("/api/data/{}", thumbnail_data.file_name);
+            url
+        })
         .collect();
+
     let project_dto = ProjectDto {
         id: project.id,
         name: project.name,
@@ -144,15 +164,36 @@ pub async fn get_project_dto(ctx: &AppContext, id: i32) -> Result<ProjectDto> {
 
 pub async fn get_project_dto_by_name(ctx: &AppContext, name: &str) -> Result<ProjectDto> {
     let project = get_project_by_name(ctx, name).await?;
+    
     let thumbnails = project
         .find_related(project_thumbnails::Entity)
         .all(&ctx.db)
         .await?;
 
+    let thumbnails_ids = thumbnails
+        .iter()
+        .map(|thumbnail| thumbnail.data_id)
+        .collect::<Vec<i32>>();
+
+    let thumbnails_data  = data::Entity::find()
+        .filter(model::query::condition().is_in(data::Column::Id, thumbnails_ids).build())
+        .all(&ctx.db)
+        .await?;
+
+    let thumbnails_map = thumbnails_data
+        .into_iter()
+        .map(|thumbnail| (thumbnail.id, thumbnail))
+        .collect::<std::collections::HashMap<i32, data::Model>>();
+
     let thumbnails = thumbnails
         .into_iter()
-        .map(|thumbnail| thumbnail.data_id.to_string())
+        .map(|thumbnail| {
+            let thumbnail_data = thumbnails_map.get(&thumbnail.data_id).unwrap();
+            let url = format!("/api/data/{}", thumbnail_data.file_name);
+            url
+        })
         .collect();
+
     let project_dto = ProjectDto {
         id: project.id,
         name: project.name,
