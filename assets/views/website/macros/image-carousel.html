@@ -3,7 +3,7 @@
     <div class="relative w-full h-full overflow-hidden carousel-inner">
         {% for thumbnail in thumbnails %}
             <div class="absolute inset-0 w-full h-full transition-opacity duration-500 ease-in-out carousel-item delay-250">
-                <img alt="slide" src="{{ thumbnail }}" class="object-cover w-full h-full">
+                <img alt="slide" src="{{ thumbnail }}" class="object-scale-down w-full h-full">
             </div>
         {% endfor %}
     </div>
