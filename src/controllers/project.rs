@@ -1,6 +1,8 @@
 #![allow(clippy::missing_errors_doc)]
 #![allow(clippy::unnecessary_struct_initialization)]
 #![allow(clippy::unused_async)]
+use axum::extract::Multipart;
+use format::redirect;
 use loco_rs::prelude::*;
 
 use crate::{
@@ -39,8 +41,24 @@ async fn create_project(
     format::json(&project)
 }
 
+async fn create_project_with_thumbnails(
+    auth: auth::JWT,
+    State(ctx): State<AppContext>,
+    payload: Multipart,
+) -> Result<Response> {
+    match users::Model::find_by_pid(&ctx.db, &auth.claims.pid).await {
+        Ok(_) => {}
+        Err(_) => return unauthorized("Unauthorized"),
+    }
+
+    services::projects::add_project_with_thumbnails_multipart(&auth, &ctx, payload).await?;
+    
+    redirect("/projects")
+}
+
 pub fn routes() -> Routes {
     Routes::new()
         .prefix("api/projects/")
         .add("/", post(create_project))
+        .add("/upload", post(create_project_with_thumbnails))
 }

@@ -1,13 +1,15 @@
+use std::path::PathBuf;
+
+use axum::extract::Multipart;
 use loco_rs::prelude::*;
 
 use crate::{
     models::{
         _entities::{
-            project_thumbnails,
-            projects::{self, ActiveModel, Entity, Model},
+            data, project_thumbnails, projects::{self, ActiveModel, Entity, Model}
         },
-        projects::{get_category_from_string, get_string_from_category, CreateProject, ProjectDto, UpdateProject},
-    }, services::data::add_data_file_from_path, shared::get_technologies_from_string::get_technologies_from_string
+        projects::{get_category_from_string, get_string_from_category, CreateProject, ProjectDto, UpdateProject}, users,
+    }, services::data::add_data_file_from_path, shared::{get_file_name_with_extension::get_file_name_with_extension_from_field, get_technologies_from_string::get_technologies_from_string}
 };
 
 use super::data::delete_data_by_id;
@@ -62,13 +64,39 @@ pub async fn get_all_projects_dto(ctx: &AppContext) -> Result<Vec<ProjectDto>> {
         .all(&ctx.db)
         .await?;
 
+    let thumbnails_ids = projects_with_thumbnails
+        .iter()
+        .map(|(_, thumbnails)| {
+            thumbnails
+                .iter()
+                .map(|thumbnail| thumbnail.data_id)
+                .collect::<Vec<i32>>()
+        })
+        .flatten()
+        .collect::<Vec<i32>>();
+
+    let thumbnails_data  = data::Entity::find()
+        .filter(model::query::condition().is_in(data::Column::Id, thumbnails_ids).build())
+        .all(&ctx.db)
+        .await?;
+
+    let thumbnails_map = thumbnails_data
+        .into_iter()
+        .map(|thumbnail| (thumbnail.id, thumbnail))
+        .collect::<std::collections::HashMap<i32, data::Model>>();
+
     let projects_dto = projects_with_thumbnails
         .into_iter()
         .map(|(project, thumbnails)| {
             let thumbnails = thumbnails
                 .into_iter()
-                .map(|thumbnail| thumbnail.data_id.to_string())
+                .map(|thumbnail| {
+                    let thumbnail_data = thumbnails_map.get(&thumbnail.data_id).unwrap();
+                    let url = format!("/api/data/{}", thumbnail_data.file_name);
+                    url
+                })
                 .collect();
+
             ProjectDto {
                 id: project.id,
                 name: project.name,
@@ -186,6 +214,176 @@ pub async fn add_project_with_thumbnails(
 
     txn.commit().await?;
 
+    Ok(())
+}
+
+pub async fn add_project_with_thumbnails_multipart(
+    auth: &auth::JWT,
+    ctx: &AppContext,
+    mut payload: Multipart,
+) -> Result<()> {
+    let _current_user = users::Model::find_by_pid(&ctx.db, &auth.claims.pid).await?;
+
+    let mut project_name = None;
+    let mut short_description = None;
+    let mut description = None;
+    let mut category = None;
+    let mut github_url = None;
+    let mut download_url = None;
+    let mut visit_url = None;
+    let mut technologies = None;
+
+    let mut thumbnails_file_names = Vec::new();
+    let mut thumbnails = Vec::new();
+
+    while let Some(field) = payload
+    .next_field()
+    .await
+    .map_err(|_| ModelError::Any("Failed to get next field".into()))?
+    {
+        let name = field
+        .name()
+        .ok_or_else(|| ModelError::Any("Failed to get field name".into()))?;
+
+        match name {
+            "name" => {
+                let value = field
+                    .text()
+                    .await
+                    .map_err(|_| ModelError::Any("Failed to get text".into()))?;
+                project_name = Some(value);
+            }
+            "short_description" => {
+                let value = field
+                    .text()
+                    .await
+                    .map_err(|_| ModelError::Any("Failed to get text".into()))?;
+                short_description = Some(value);
+            }
+            "description" => {
+                let value = field
+                    .text()
+                    .await
+                    .map_err(|_| ModelError::Any("Failed to get text".into()))?;
+                description = Some(value);
+            }
+            "category" => {
+                let value = field
+                    .text()
+                    .await
+                    .map_err(|_| ModelError::Any("Failed to get text".into()))?;
+                category = Some(value);
+            }
+            "github_url" => {
+                let value = field
+                    .text()
+                    .await
+                    .map_err(|_| ModelError::Any("Failed to get text".into()))?;
+                github_url = Some(value);
+            }
+            "download_url" => {
+                let value = field
+                    .text()
+                    .await
+                    .map_err(|_| ModelError::Any("Failed to get text".into()))?;
+                download_url = Some(value);
+            }
+            "visit_url" => {
+                let value = field
+                    .text()
+                    .await
+                    .map_err(|_| ModelError::Any("Failed to get text".into()))?;
+                visit_url = Some(value);
+            }
+            "technologies" => {
+                let value = field
+                    .text()
+                    .await
+                    .map_err(|_| ModelError::Any("Failed to get text".into()))?;
+                technologies = Some(value);
+            }
+            "thumbnail" => {
+               let (_, ext) = get_file_name_with_extension_from_field(&field, "txt").map_err(|_| ModelError::Any("Failed to get file name".into()))?;
+
+                let file_name = uuid::Uuid::new_v4().to_string();
+                let file_name = format!("{}.{}", file_name, ext);
+
+                let data_content = field
+                    .bytes()
+                    .await
+                    .map_err(|_| ModelError::Any("Failed to get bytes".into()))?;
+
+                thumbnails_file_names.push(file_name);
+                thumbnails.push(data_content);
+            },
+            _ => {}
+        }
+    }
+
+    let category = category.map(|s| get_category_from_string(&s));
+    
+    let project = CreateProject {
+        name: project_name.ok_or_else(|| ModelError::Any("Name field is required".into()))?,
+        short_description: short_description.ok_or_else(|| ModelError::Any("Short description field is required".into()))?,
+        description: description,
+        category: category.ok_or_else(|| ModelError::Any("Category field is required".into()))?,
+        github_url: github_url,
+        download_url: download_url,
+        visit_url: visit_url,
+        technologies: technologies.ok_or_else(|| ModelError::Any("Technologies field is required".into()))?.split(",").map(|s| s.to_string()).collect(),
+    };
+
+    let txn = ctx.db.begin().await?;
+
+    let item = ActiveModel {
+        name: Set(project.name),
+        short_description: Set(project.short_description),
+        description: Set(project.description),
+        category: Set(get_string_from_category(&project.category)),
+        github_url: Set(project.github_url),
+        download_url: Set(project.download_url),
+        visit_url: Set(project.visit_url),
+        technology: Set(project.technologies.join(",")),
+        ..Default::default()
+    };
+
+    let item = item.insert(&txn).await?;
+
+    let project_id = item.id;
+
+    for (thumbnail_file_name, thumbnail) in thumbnails_file_names.iter().zip(thumbnails.iter()) {
+        let thumbnail_data = data::ActiveModel {
+            file_name: Set(thumbnail_file_name.clone()),
+            file_url: Set(format!("uploads/{}", thumbnail_file_name)),
+            protected: Set(false),
+            ..Default::default()
+        };
+
+        let thumbnail_data = thumbnail_data.insert(&txn).await?;
+        let path = PathBuf::from(thumbnail_file_name);
+        match ctx
+        .storage
+        .as_ref()
+        .upload(
+            path.as_path(),
+            thumbnail,
+        )
+        .await {
+            Ok(_) => {
+                let thumbnail = project_thumbnails::ActiveModel {
+                    project_id: Set(project_id),
+                    data_id: Set(thumbnail_data.id),
+                    ..Default::default()
+                };
+
+                thumbnail.insert(&txn).await?;
+            },
+            Err(_) => return Err(Error::Any("Failed to save file to storage".into())),
+        }
+    }
+
+    txn.commit().await?;
+    
     Ok(())
 }
 

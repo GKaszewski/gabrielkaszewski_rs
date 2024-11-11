@@ -41,6 +41,6 @@ impl CurrentResponse {
     }
 }
 
-pub async fn login(v: impl ViewRenderer) -> Result<impl IntoResponse> {
+pub async fn login(v: impl ViewRenderer) -> Result<impl IntoResponse> {    
     format::render().view(&v, "website/login.html", data!({}))
 }

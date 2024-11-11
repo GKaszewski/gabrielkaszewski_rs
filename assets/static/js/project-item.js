@@ -1,8 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
   const carousels = document.querySelectorAll('[id^="carousel-"]');
+
   carousels.forEach((carousel) => {
     let buttons = carousel.querySelectorAll('.carousel-button');
     let activeSlide = 0;
+
+    if (buttons.length === 1) {
+      buttons[0].classList.add('opacity-0');
+    }
 
     buttons.forEach((button, index) => {
       button.addEventListener('click', () => {

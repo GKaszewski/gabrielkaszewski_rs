@@ -2,6 +2,7 @@ use std::path::PathBuf;
 
 use crate::models::_entities::data::{self, ActiveModel, Entity, Model};
 use crate::models::users::users;
+use crate::shared::get_file_name_with_extension::get_file_name_with_extension_from_field;
 use axum::extract::Multipart;
 use axum_extra::headers::Range;
 use axum_extra::TypedHeader;
@@ -129,10 +130,7 @@ pub async fn add(
                 protected = Some(value);
             }
             "file" => {
-                let og_file_name = field
-                    .file_name()
-                    .ok_or_else(|| ModelError::Any("Failed to get file name".into()))?;
-                let ext = String::from(og_file_name.split('.').last().unwrap_or("txt"));
+                let (og_file_name, ext) = get_file_name_with_extension_from_field(&field, "txt").map_err(|_| ModelError::Any("Failed to get file name".into()))?;
 
                 let temp_file_name = if uuid_name {
                     let temp_file_name = uuid::Uuid::new_v4().to_string();

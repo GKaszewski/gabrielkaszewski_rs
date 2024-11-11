@@ -1,12 +1,13 @@
 {% import "website/macros/chip.html" as chip %} {% extends "website/base.html"
 %} {% block content %}
 <div class="w-full">
+  <div class="w-full mt-16 md:hidden"></div>
   <div class="relative inline-block w-full min-w-full">
     <img src="/static/images/optimized-75.webp" alt="Background"
-      class="object-cover w-full max-h-full pointer-events-none" />
+      class="hidden object-cover w-full max-h-full pointer-events-none md:block" />
     <div
-      class="absolute inset-0 flex flex-col items-center justify-center w-full gap-4 md:items-start md:justify-start md:p-16 lg:p-20">
-      <div>
+      class="flex flex-col items-center justify-start w-full md:inset-0 md:absolute md:items-start md:p-16 lg:p-20">
+      <div class="hidden md:block">
         <h1
           class="mb-4 text-2xl font-bold tracking-tight text-white md:text-4xl lg:text-6xl md:mb-0 -motion-translate-x-in-100 motion-translate-y-in-75">
           Gabriel Kaszewski
@@ -16,7 +17,15 @@
           Full-Stack Developer
         </h2>
       </div>
-      <div class="items-center hidden gap-2 md:flex motion-preset-slide-right motion-duration-2000">
+      <div class="md:hidden">
+        <h1 class="text-2xl font-bold tracking-tight text-white motion-preset-slide-right motion-duration-1000">
+          Gabriel Kaszewski
+        </h1>
+        <h2 class="text-lg font-light tracking-tight text-white motion-preset-slide-right motion-duration-1000">
+          Full-Stack Developer
+        </h2>
+      </div>
+      <div class="flex items-center gap-2 mt-4 motion-preset-slide-right motion-duration-2000 md:mt-0">
         <a href="/api/data/cv.pdf" title="My CV">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -51,7 +60,7 @@
         </a>
       </div>
     </div>
-    <div class="absolute bottom-0 p-2 text-sm">
+    <div class="absolute bottom-0 hidden p-2 text-sm md:block">
       <span class="flex gap-1">
         Photo by
         <a class="underline"
@@ -67,7 +76,6 @@
     </div>
   </div>
 </div>
-<div class="w-full mt-8"></div>
 <div id="who-am-i" class="flex flex-col items-center justify-center gap-4 p-4 rounded md:w-fit">
   <h3 class="mt-4 mb-2 text-5xl font-bold tracking-tight">Who am I? 🤔</h3>
   <section class="prose text-white md:prose-lg lg:prose-xl">

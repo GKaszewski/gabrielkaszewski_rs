@@ -1,6 +1,7 @@
 {% extends "website/base.html" %} {% block content %}
 <div class="w-full mt-16"></div>
-<form method="post" id="project-upload" class="flex flex-col gap-2 text-black" action="/api/projects">
+<form method="post" id="project-upload" class="flex flex-col gap-2 text-black" action="/api/projects/upload"
+    enctype="multipart/form-data">
     <label class="text-white" for="name">Project Name:</label>
     <input type="text" id="name" name="name" required />
 
@@ -30,6 +31,9 @@
 
     <label class="text-white" for="technology">Technologies:</label>
     <input type="text" id="technology" name="technologies" required />
+
+    <label for="files" class="text-white">Choose thumbnails files:</label>
+    <input type="file" id="files" name="thumbnail" multiple accept="image/*">
 
     <button type="submit" class="p-2 text-gray-900 bg-yellow-500 rounded-sm shadow hover:bg-yellow-600">Submit</button>
 </form>

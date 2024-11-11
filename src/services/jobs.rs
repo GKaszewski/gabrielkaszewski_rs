@@ -1,7 +1,8 @@
 use loco_rs::prelude::*;
+use sea_orm::QueryOrder;
 
 use crate::{models::{
-    _entities::jobs::{Entity, Model},
+    _entities::jobs::{Column, Entity, Model},
     jobs::JobWithTechnologies,
 }, shared::get_technologies_from_string::get_technologies_from_string};
 
@@ -11,7 +12,9 @@ pub async fn get_all_jobs(ctx: &AppContext) -> Result<Vec<Model>> {
 }
 
 pub async fn get_all_jobs_with_technologies(ctx: &AppContext) -> Result<Vec<JobWithTechnologies>> {
-    let jobs = Entity::find().all(&ctx.db).await?;
+    let jobs = Entity::find()
+    .order_by_asc(Column::StartDate)
+    .all(&ctx.db).await?;
     let jobs_with_technologies = jobs
         .into_iter()
         .map(|job| {

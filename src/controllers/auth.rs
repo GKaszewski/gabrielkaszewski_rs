@@ -109,7 +109,7 @@ async fn login(
 
     let token = user
         .generate_jwt(&jwt_secret.secret, &jwt_secret.expiration)
-        .or_else(|_| unauthorized("unauthorized!"))?;
+        .or_else(|_| unauthorized("jwt error"))?;
 
     let cookie = Cookie::build(("token", token.clone()))
         .path("/")
