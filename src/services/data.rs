@@ -131,6 +131,8 @@ pub async fn add(
             }
             "file" => {
                 let (og_file_name, ext) = get_file_name_with_extension_from_field(&field, "txt").map_err(|_| ModelError::Any("Failed to get file name".into()))?;
+                
+                tracing::info!("File name: {:?}", og_file_name);
 
                 let temp_file_name = if uuid_name {
                     let temp_file_name = uuid::Uuid::new_v4().to_string();
@@ -139,7 +141,7 @@ pub async fn add(
                     og_file_name.to_string()
                 };
 
-                let temp_file_name = format!("{}.{}", temp_file_name, ext);
+                tracing::info!("Temp file name: {:?}", temp_file_name);
 
                 file_name = Some(temp_file_name.clone());
 
