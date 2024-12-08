@@ -60,6 +60,10 @@ impl Hooks for App {
     }
 
     async fn after_context(ctx: AppContext) -> Result<AppContext> {
+        // Create uploads directory if it doesn't exist
+        let _ = std::fs::create_dir("uploads");
+
+
         let store = storage::drivers::local::new_with_prefix("uploads").map_err(Box::from)?;
 
         Ok(AppContext {
