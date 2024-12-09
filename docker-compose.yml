@@ -4,26 +4,26 @@ services:
     volumes:
       - uploads_volume:/usr/app/uploads
     environment:
-      - HOST=http://0.0.0.0
-      - DATABASE_URL=postgres://user:password@db:5432/db
-      - JWT_SECRET=PqRwLF2rhHe8J21oBeHychangeit
-      - LOGGER_LEVEL=info
-      - BINDING=0.0.0.0
+      - HOST=${HOST}
+      - DATABASE_URL=${DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - LOGGER_LEVEL=${LOGGER_LEVEL}
+      - BINDING=${BINDING}
     depends_on:
       db:
         condition: service_healthy
-    ports:
-      - 5150:5150
+    expose:
+      - ${PORT}
   db:
     image: postgres:latest
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=db
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U user"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
       interval: 10s
       timeout: 5s
       retries: 5
