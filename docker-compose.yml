@@ -13,7 +13,7 @@ services:
       db:
         condition: service_healthy
     expose:
-      - ${PORT}
+      - 5150
   db:
     image: postgres:latest
     volumes:
