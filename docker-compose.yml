@@ -9,12 +9,11 @@ services:
       - JWT_SECRET=${JWT_SECRET}
       - LOGGER_LEVEL=${LOGGER_LEVEL}
       - BINDING=${BINDING}
-      - PORT=${PORT}
     depends_on:
       db:
         condition: service_healthy
     expose:
-      - ${PORT}
+      - 5150
   db:
     image: postgres:latest
     volumes:
