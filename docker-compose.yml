@@ -1,0 +1,32 @@
+services:
+  web:
+    build: .
+    volumes:
+      - uploads_volume:/usr/app/uploads
+    environment:
+      - HOST=http://0.0.0.0
+      - DATABASE_URL=postgres://user:password@db:5432/db
+      - JWT_SECRET=PqRwLF2rhHe8J21oBeHychangeit
+      - LOGGER_LEVEL=info
+      - BINDING=0.0.0.0
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - 5150:5150
+  db:
+    image: postgres:latest
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+volumes:
+  postgres_data:
+  uploads_volume:

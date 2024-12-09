@@ -109,7 +109,8 @@ pub async fn add(
     let mut protected = None;
     let mut file_name = None;
     let mut content = None;
-    let mut file_path = None;
+    let mut unique_name = None;
+    let mut ext = None;
 
     while let Some(field) = payload
         .next_field()
@@ -128,25 +129,23 @@ pub async fn add(
                     .parse::<bool>()
                     .map_err(|_| ModelError::Any("Failed to parse bool".into()))?;
                 protected = Some(value);
-            }
+            },
+            "unique_name" => {
+                let value = field
+                    .text()
+                    .await
+                    .map_err(|_| ModelError::Any("Failed to get text".into()))?
+                    .parse::<bool>()
+                    .map_err(|_| ModelError::Any("Failed to parse bool".into()))?;
+                unique_name = Some(value);
+            },
             "file" => {
-                let (og_file_name, ext) = get_file_name_with_extension_from_field(&field, "txt").map_err(|_| ModelError::Any("Failed to get file name".into()))?;
+                let (og_file_name, extension) = get_file_name_with_extension_from_field(&field, "txt").map_err(|_| ModelError::Any("Failed to get file name".into()))?;
                 
-                tracing::info!("File name: {:?}", og_file_name);
+                let og_file_name = format!("{}.{}", og_file_name, extension);
+                ext = Some(extension.clone());
 
-                let temp_file_name = if uuid_name {
-                    let temp_file_name = uuid::Uuid::new_v4().to_string();
-                    format!("{}.{}", temp_file_name, ext)
-                } else {
-                    og_file_name.to_string()
-                };
-
-                tracing::info!("Temp file name: {:?}", temp_file_name);
-
-                file_name = Some(temp_file_name.clone());
-
-                let path = PathBuf::from(temp_file_name);
-                file_path = Some(path.clone());
+                file_name = Some(og_file_name.clone());
 
                 let data_content = field
                     .bytes()
@@ -161,8 +160,19 @@ pub async fn add(
 
     let protected =
         protected.ok_or_else(|| ModelError::Any("Protected field is required".into()))?;
-
+    let unique_name = unique_name.unwrap_or(true);
     let file_name = file_name.ok_or_else(|| ModelError::Any("File field is required".into()))?;
+
+    let file_name = match (uuid_name, unique_name) {
+        (true, true) => {
+            let temp_file_name = uuid::Uuid::new_v4().to_string();
+            format!("{}.{}", temp_file_name, ext.unwrap_or("txt".to_string()))
+        }
+        _ => file_name,
+    };
+
+    
+    let path = PathBuf::from(file_name.clone());
 
     let mut item = ActiveModel {
         ..Default::default()
@@ -174,13 +184,12 @@ pub async fn add(
 
     let item = item.insert(&ctx.db).await?;
 
-    let file_path = file_path.ok_or_else(|| ModelError::Any("File path is required".into()))?;
     let content = content.ok_or_else(|| ModelError::Any("Content is required".into()))?;
 
     match ctx
         .storage
         .as_ref()
-        .upload(file_path.as_path(), &content)
+        .upload(path.as_path(), &content)
         .await
     {
         Ok(_) => {}
@@ -232,7 +241,7 @@ pub async fn delete_data_by_id(id: i32, ctx: &AppContext) -> ModelResult<()> {
 
     match data {
         Some(data) => {
-            let path = PathBuf::from(&data.file_url);
+            let path = PathBuf::from(&data.file_name);
             match ctx.storage.as_ref().delete(&path).await {
                 Ok(_) => {}
                 Err(_) => return Err(ModelError::Any("Failed to delete file from storage".into())),

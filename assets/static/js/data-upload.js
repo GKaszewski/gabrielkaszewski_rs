@@ -1,6 +1,7 @@
 const form = document.getElementById('data-upload');
 const fileInput = document.getElementById('file-input');
-const protectedInput = document.getElementById('protected-input');
+const protectedInput = document.getElementById('protected');
+const uniqueNameInput = document.getElementById('unique_name');
 
 const uploadData = async () => {
   if (!fileInput.files.length) {
@@ -11,6 +12,7 @@ const uploadData = async () => {
   const formData = new FormData();
   formData.append('file', fileInput.files[0]);
   formData.append('protected', protectedInput.checked ? 'true' : 'false');
+  formData.append('unique_name', uniqueNameInput.checked ? 'true' : 'false');
 
   try {
     const response = await fetch('/api/data/upload', {

@@ -1,4 +1,5 @@
 {% extends "website/base.html" %} {% block content %}
+<script src="/static/js/data-delete.js" defer></script>
 <span class="mt-8"></span>
 <a class="p-2 text-gray-900 bg-yellow-500 rounded-sm shadow hover:bg-yellow-600" href="/upload">Add new file</a>
 <table class="table-fixed">
@@ -18,6 +19,12 @@
             <td>{{ file.protected }}</td>
             <td><a class="p-2 text-gray-900 bg-yellow-500 rounded-sm shadow hover:bg-yellow-600"
                     href="/api/data/{{ file.file_name }}">Download</a></td>
+            <td>
+                <form class="delete-form">
+                    <input class="file-id" id="file_id" type="hidden" name="file_id" value="{{ file.id }}" />
+                    <button class="p-2 text-gray-900 bg-red-500 rounded-sm shadow hover:bg-red-600 delete-button">Delete</button>
+                </form>
+            </td>
         </tr>
         {% endfor %}
     </tbody>
