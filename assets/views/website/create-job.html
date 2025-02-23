@@ -1,0 +1,18 @@
+{% extends "website/base.html" %} {% block content %}
+<div class="w-full mt-16"></div>
+<form method="post" class="flex flex-col gap-2 text-black" action="/api/jobs">
+    <label for="position">Position</label>
+    <input type="text" name="position" id="position" class="p-2 border border-gray-300 rounded-md" required>
+    <label for="company">Company</label>
+    <input type="text" name="company" id="company" class="p-2 border border-gray-300 rounded-md" required>
+    <label for="technologies">Technologies</label>
+    <input type="text" name="technologies" id="technologies" class="p-2 border border-gray-300 rounded-md" required>
+    <label for="start_date">Start date</label>
+    <input type="date" name="start_date" id="start_date" class="p-2 border border-gray-300 rounded-md" required>
+    <label for="end_date">End date</label>
+    <input type="date" name="end_date" id="end_date" class="p-2 border border-gray-300 rounded-md">
+    <label for="still_working">Still working</label>
+    <input type="checkbox" name="still_working" id="still_working" value="true">
+    <button type="submit" class="p-2 text-gray-900 bg-yellow-500 rounded-sm shadow hover:bg-yellow-600">Submit</button>
+</form>
+{% endblock content%}

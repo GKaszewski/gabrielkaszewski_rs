@@ -80,6 +80,19 @@ pub async fn render_data(
     views::data::list(v, &ctx).await    
 }
 
+async fn render_create_job(
+    auth: auth::JWT,
+    ViewEngine(v): ViewEngine<TeraView>,
+    State(ctx): State<AppContext>,
+) -> Result<impl IntoResponse> {
+    match users::Model::find_by_pid(&ctx.db, &auth.claims.pid).await {
+        Ok(_) => {}
+        Err(_) => return unauthorized("Unauthorized"),
+    }
+
+    views::job::create_job(v).await
+}
+
 pub fn routes() -> Routes {
     Routes::new()
         .add("/", get(render_index))
@@ -89,6 +102,7 @@ pub fn routes() -> Routes {
         .add("/projects/create", get(render_create_project))
         .add("/projects/:id", get(render_project_detail))
         .add("/projects/project/:name", get(render_project_detail_from_name))
+        .add("/jobs/create", get(render_create_job))
         .add("/data", get(render_data))
         .add("/about", get(render_about))
 }
