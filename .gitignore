@@ -18,6 +18,7 @@ node_modules/
 *.pdb
 
 *.sqlite
+*.db
 
 uploads/
 assets/static/css/main.css

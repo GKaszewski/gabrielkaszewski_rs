@@ -1,6 +1,6 @@
 use loco_rs::prelude::*;
 
-use crate::models::_entities::skills::ActiveModel;
+use crate::services::skills::add_skill;
 
 pub struct CreateSkillData;
 
@@ -16,13 +16,7 @@ impl Task for CreateSkillData {
     async fn run(&self, app_context: &AppContext, vars: &task::Vars) -> Result<()> {
         let name = vars.cli_arg("name")?;
 
-        let mut item = ActiveModel {
-            ..Default::default()
-        };
-
-        item.name = Set(name.to_string());
-
-        let item = item.insert(&app_context.db).await?;
+        let item = add_skill(app_context, name.to_string()).await?;
 
         tracing::info!(
             skill_id = item.id,

@@ -78,6 +78,7 @@ impl Hooks for App {
         tasks.register(tasks::create_user::CreateUserData);
         tasks.register(tasks::create_job::CreateJobData);
         tasks.register(tasks::create_skill::CreateSkillData);
+        tasks.register(tasks::import_skills::ImportSkills);
         tasks.register(tasks::add_data_file::AddDataFile);
         tasks.register(tasks::delete_data::DeleteData);
         tasks.register(tasks::clear_data::ClearData);

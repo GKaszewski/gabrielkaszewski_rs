@@ -88,7 +88,7 @@ mailer:
 # Database Configuration
 database:
   # Database connection URI
-  uri: {{ get_env(name="DATABASE_URL", default="postgres://postgres:postgres@localhost:5432/gabrielkaszewski_rs") }}
+  uri: {{ get_env(name="DATABASE_URL", default="sqlite://./database.db") }}
   # When enabled, the sql query will be logged.
   enable_logging: false
   # Set the timeout duration when acquiring a connection.
