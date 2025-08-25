@@ -1,0 +1,14 @@
+services:
+  website:
+    build: .
+    container_name: gabrielkaszewski-website
+    restart: unless-stopped
+    ports:
+      - "80:5150"
+    volumes:
+      - ./database:/app/db
+      - ./uploads:/app/uploads
+    environment:
+      - JWT_SECRET=your_super_secret_production_jwt_key_here
+      - HOST=https://your-domain.com
+      - BINDING=0.0.0.0

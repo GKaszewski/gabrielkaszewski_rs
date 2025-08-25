@@ -21,5 +21,6 @@ node_modules/
 *.db
 
 uploads/
+database/
 assets/static/css/main.css
 .env
