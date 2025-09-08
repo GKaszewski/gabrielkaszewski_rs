@@ -144,8 +144,19 @@
   <section class="prose text-white md:prose-lg lg:prose-xl">
     <p class="motion-preset-pop motion-delay-75">
       Hi, my name is Gabriel Kaszewski - I'm a Bioinformatics graduate 🧬 and a
-      self-taught full-stack developer 💻.
+      self-taught full-stack developer 💻. I love creating software that
+      resolves complex problems, and my most ambitious project yet is my first
+      game. Take a look at the Steam preview below and consider adding it to
+      your wishlist!
     </p>
+
+    <iframe
+      src="https://store.steampowered.com/widget/3575090/"
+      frameborder="0"
+      width="646"
+      height="190"
+    ></iframe>
+
     <p class="motion-preset-pop motion-delay-100">
       My journey with programming started when I was 11 🚀. I love solving
       problems and creating software that resolves them 👨‍💻.
@@ -179,9 +190,9 @@
   <h3 class="mt-4 mb-2 text-5xl font-bold tracking-tight">Experience 📈</h3>
   {% for job in jobs %}
   <div
-    class="flex flex-col gap-2 p-4 text-black bg-gray-50 rounded-lg w-[20rem] max-w-[20rem] shadow-lg odd:motion-preset-slide-right-md odd:motion-delay-100 even:motion-preset-rebound"
+    class="bg-white glass-effect glossy-effect bottom gloss-highlight flex flex-col gap-2 p-4 text-black w-[20rem] max-w-[20rem] odd:motion-preset-slide-right-md odd:motion-delay-100 even:motion-preset-rebound"
   >
-    <h4 class="flex items-center gap-1 text-2xl">
+    <h4 class="flex items-center gap-1 text-2xl text-shadow-sm">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"
@@ -200,7 +211,7 @@
       </svg>
       {{ job.position }}
     </h4>
-    <h5 class="flex items-center gap-1 text-xl font-light">
+    <h5 class="flex items-center gap-1 text-xl font-light text-shadow-sm">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"

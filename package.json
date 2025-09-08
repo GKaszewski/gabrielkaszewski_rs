@@ -4,12 +4,12 @@
   "type": "module",
   "devDependencies": {
     "@types/bun": "latest",
-    "tailwindcss-motion": "^0.4.1-beta"
+    "tailwindcss-motion": "^1.1.1"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@tailwindcss/typography": "^0.5.15"
+    "@tailwindcss/typography": "^0.5.16"
   }
 }

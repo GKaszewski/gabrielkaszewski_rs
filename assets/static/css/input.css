@@ -2,16 +2,132 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {
-    .my-animate {
-        opacity: 1 !important;
-        transform: translateY(0) !important;
-        transition: opacity 0.3s ease, transform 0.3s ease;
-    }
+@layer components {
+  .glossy-effect::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    border-radius: var(--radius); /* Inherit parent's border radius */
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.4) 0%,
+      rgba(255, 255, 255, 0.1) 100%
+    );
+    opacity: 0.8;
+    pointer-events: none; /* Allow clicks to pass through */
+    z-index: 1; /* Ensure it's above the background but below content */
+  }
 
-    .hidden-for-animation {
-        opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.3s ease, transform 0.3s ease;
-    }
+  .glossy-effect.bottom::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 30%;
+    border-radius: var(--radius);
+    background: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.1) 0%,
+      rgba(0, 0, 0, 0) 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .fa-gloss {
+    position: relative;
+  }
+
+  .fa-gloss::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    border-radius: var(--radius);
+    background: linear-gradient(var(--gradient-fa-gloss));
+    opacity: 0.8;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .fa-gloss.bottom::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 30%;
+    border-radius: var(--radius);
+    background: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.1) 0%,
+      rgba(0, 0, 0, 0) 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .shadow-fa-sm {
+    box-shadow: var(--shadow-fa-sm), var(--fa-inner);
+  }
+  .shadow-fa-md {
+    box-shadow: var(--shadow-fa-md), var(--fa-inner);
+  }
+  .shadow-fa-lg {
+    box-shadow: var(--shadow-fa-lg), var(--fa-inner);
+  }
+  .text-shadow-default {
+    text-shadow: var(--text-shadow-default);
+  }
+  .text-shadow-sm {
+    text-shadow: var(--text-shadow-sm);
+  }
+  .text-shadow-md {
+    text-shadow: var(--text-shadow-md);
+  }
+  .text-shadow-lg {
+    text-shadow: var(--text-shadow-lg);
+  }
+
+  .glass-effect {
+    @apply bg-transparent backdrop-blur-lg border border-white/20 shadow-fa-lg;
+    clip-path: inset(0 round 1rem);
+  }
+
+  .gloss-highlight::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60%;
+    border-radius: inherit; /* This is key for matching the parent's border radius */
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.5) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+
+@layer utilities {
+  .my-animate {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .hidden-for-animation {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
 }

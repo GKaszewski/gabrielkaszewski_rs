@@ -2,24 +2,24 @@
 %} {% block content %}
 <div class="mt-8"></div>
 <div
-  class="flex flex-col items-center justify-center gap-2 p-4 bg-white rounded-lg"
+  class="flex flex-col items-center justify-center gap-2 p-4 bg-white rounded-lg glass-effect glossy-effect bottom gloss-highlight shadow-lg"
 >
   <img
     src="/static/images/ja.jpg"
     alt="me"
     width="300"
     height="300"
-    class="object-cover rounded-md"
+    class="object-cover rounded-md glossy-effect bottom gloss-highlight shadow-lg"
   />
   <h2 class="mt-4 text-2xl font-bold text-black">Hello, I'm Gabriel! 👋</h2>
 </div>
 <h1 class="mt-6 text-3xl font-extrabold">More info about me! 💡</h1>
 <div
-  class="flex flex-col m-4 prose text-white md:text-left md:m-0 md:w-1/2 md:prose-lg lg:prose-xl prose-blue"
+  class="flex flex-col m-4 prose text-white md:text-left md:m-0 md:w-1/2 md:prose-lg lg:prose-xl prose-yellow"
 >
   <p>
     Hi! I am Gabriel and I am {{ age }} years old. I graduated in Bioinformatics
-    from the University of Gdansk 🏫. I'm fluent in Polish and English and
+    from the University of Gdańsk 🏫. I'm fluent in Polish and English and
     currently work as a Python Developer at digimonkeys.com 🐒💻.
   </p>
   <p>
@@ -44,6 +44,114 @@
   Books📚")}} {{ chip::chip(text="Astronomy 🔭")}} {{ chip::chip(text="Sports
   🏅") }} {{ chip::chip(text="History 🏰")}}
 </div>
+
+<h1 class="mt-6 text-3xl font-extrabold">My Philosophy 🧠</h1>
+<div
+  class="flex flex-col m-4 prose text-white md:text-left md:m-0 md:w-1/2 md:prose-lg lg:prose-xl"
+>
+  <p>
+    I believe much of today's software is bloated, inefficient, and
+    disrespectful of the user's resources. My passion, which started with a
+    simple curiosity at age 11, is to build a better alternative. I focus on
+    creating software that is
+    <strong class="text-yellow-400"
+      >fast, reliable, and genuinely intuitive</strong
+    >, guided by the principles of clean and efficient code.
+  </p>
+</div>
+
+<h1 class="mt-6 text-3xl font-extrabold">My Toolkit 🛠️</h1>
+<div
+  class="bg-transparent glass-effect glossy-effect bottom gloss-highlight rounded-2xl p-4 m-4 md:m-0 md:w-1/2 w-full text-white text-shadow-sm"
+>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <h3 class="text-xl font-bold">OS & Hardware</h3>
+      <p>Arch Linux</p>
+      <p>Custom-built PC Rig</p>
+      <p>AMD Ryzen 7 5800X3D</p>
+      <p>NVIDIA RTX 4070 Ti</p>
+      <p>48GB RAM</p>
+    </div>
+    <div>
+      <h3 class="text-xl font-bold">Editor</h3>
+      <p>Jetbrains IDEs (Pycharm, Rider)</p>
+      <p>VS Code</p>
+    </div>
+    <div>
+      <h3 class="text-xl font-bold">Primary Languages</h3>
+      <p>Rust, Python, C#, TypeScript</p>
+    </div>
+    <div>
+      <h3 class="text-xl font-bold">Favorite Tech</h3>
+      <p>Axum, Godot, React, TailwindCSS</p>
+    </div>
+  </div>
+</div>
+
+<h1 class="mt-6 text-3xl font-extrabold">Future Goals 🚀</h1>
+<div
+  class="flex flex-col m-4 prose text-white md:text-left md:m-0 md:w-1/2 md:prose-lg lg:prose-xl prose-blue"
+>
+  <p>
+    I'm always eager to learn and grow. My goal is to continue honing my skills
+    in backend development and system architecture while exploring new creative
+    outlets. Here's what's on my radar:
+  </p>
+  <ul class="list-none p-0">
+    <li class="flex items-center gap-2 not-prose">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+      <span
+        >Deepen my expertise in Rust for high-performance applications.</span
+      >
+    </li>
+    <li class="flex items-center gap-2 not-prose">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+      <span>Contribute to impactful open-source projects.</span>
+    </li>
+    <li class="flex items-center gap-2 not-prose">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+      <span>Develop and release my first full-fledged indie game.</span>
+    </li>
+  </ul>
+</div>
+
 <h1 class="mt-6 text-3xl font-bold">FAQ ❓</h1>
 <div id="faq" class="flex flex-col gap-2 m-4">
   <div>
@@ -58,7 +166,9 @@
   </div>
   <div>
     <h6 class="text-xl font-bold">Are you studying Computer Science?</h6>
-    <p>No, I study Bioinformatics, but it's closely related 🧬💻.</p>
+    <p>
+      No, I have a degree in Bioinformatics, which is a closely related field.
+    </p>
   </div>
   <div>
     <h6 class="text-xl font-bold">
